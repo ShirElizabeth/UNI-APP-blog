@@ -3,7 +3,7 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "uni-app"
+				"navigationBarTitleText": "CHAN"
 			}
 		}
 	    ,{
@@ -19,8 +19,34 @@
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
-		"navigationBarBackgroundColor": "#F8F8F8",
+		"navigationBarBackgroundColor": "#aaff7f",
 		"backgroundColor": "#F8F8F8"
+	},
+	"tabBar": {
+		"color": "",
+		"selectedColor": "",
+		"list": [
+			{
+				"iconPath": "static/icons/badge0.png",
+				"selectedIconPath": "static/logo.png",
+				"pagePath": "pages/index/index",
+				"text": "博客"
+				
+			},
+			{
+				"iconPath": "static/icons/badge1.png",
+				"selectedIconPath": "static/logo.png",
+				"pagePath": "pages/index/index",
+				"text": "图标"
+			},
+				
+			{
+				"iconPath": "static/icons/badge2.png",
+				"selectedIconPath": "static/logo.png",
+				"pagePath": "pages/index/index",
+				"text": "我的"
+			}
+		]
 	},
 	"uniIdRouter": {}
 }
