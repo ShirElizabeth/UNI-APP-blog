@@ -49,8 +49,9 @@
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "CHAN",
-		"navigationBarBackgroundColor": "#aaff7f",
+		"navigationBarBackgroundColor": "#55aa00",
 		"backgroundColor": "#F8F8F8"
+		
 	},
 	"tabBar": {
 		"color": "",

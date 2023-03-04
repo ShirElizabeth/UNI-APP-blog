@@ -1,8 +1,16 @@
 <template>
 	<view class="content">
-		<image class="logo" src="/static/logo.png"></image>
+		<!-- <image class="logo" src="/static/logo.png"></image>
 		<view class="text-area">
-			<text class="title">{{title}}</text>
+			<text class="title">{{blogs}}</text>
+		</view> -->
+		<view v-if="blogs.length == 0" class="none">
+			<image class="logo" src="../../static/icons/nodata.png" mode=""></image>
+			<text class="text-area">抱歉，找不到相关文章</text>
+		</view>
+		<view v-else class="item-container">
+			
+			.
 		</view>
 	</view>
 </template>
@@ -11,7 +19,7 @@
 	export default {
 		data() {
 			return {
-				title: 'Hello'
+				blogs: []
 			}
 		},
 		onLoad() {
@@ -32,8 +40,8 @@
 	}
 
 	.logo {
-		height: 200rpx;
-		width: 200rpx;
+		height: 150rpx;
+		width: 300rpx;
 		margin-top: 200rpx;
 		margin-left: auto;
 		margin-right: auto;
