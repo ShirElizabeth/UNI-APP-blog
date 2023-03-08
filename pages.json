@@ -48,7 +48,7 @@
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
-		"navigationBarTitleText": "CHAN",
+		"navigationBarTitleText": "首页",
 		"navigationBarBackgroundColor": "#55aa00",
 		"backgroundColor": "#F8F8F8"
 		

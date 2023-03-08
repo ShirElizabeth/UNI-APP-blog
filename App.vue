@@ -14,4 +14,38 @@
 
 <style>
 	/*每个页面公共css */
+	.content {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		margin-top: 20rpx ;
+		margin-bottom: 20rpx;
+		
+	}
+	
+	.logo {
+		height: 100rpx;
+		width: 300rpx;
+		margin-top: 200rpx;
+		margin-left: auto;
+		margin-right: auto;
+		margin-bottom: 50rpx;
+	}
+	
+	.text-area {
+		display: flex;
+		justify-content: center;
+	}
+	
+	.title {
+		font-size: 36rpx;
+		color: #8f8f94;
+	}
+	.img{
+		display: block;
+		margin: auto;
+		max-width: 100%;
+		max-height: 100%;
+	}
 </style>

@@ -8,11 +8,15 @@
 			<image class="logo" src="../../static/icons/nodata.png" mode=""></image>
 			<text class="text-area">抱歉，找不到相关文章</text>
 		</view>
-		<view v-else class="item-container">
-			
-			.
-		</view>
-	</view>
+		<view v-else class="item-container" v-for="(item,index) in blogs" :key="item.id">
+			<text class="item-title">{{item.title}}</text>
+			<rich-text :nodes="item.description" class="item-desc"></rich-text>
+			<image :src="item.picture" mode="widthFix" class="img itme-pic"></image>
+			<view class="">
+				 <text class="item-tag" v-for="(tag,idx) in item.tags" :key="idx">{{tag}}</text>
+			</view>
+		</view>	
+	</view>	
 </template>
 
 <script>
@@ -23,7 +27,27 @@
 			}
 		},
 		onLoad() {
-
+			// 快捷键ureq
+         uni.request({
+         	url: 'https://1.12.223.54/api/v1/blogs/',
+         	method: 'GET',
+			sslVerify:false,
+         	data: {},
+         	success: res => {
+				this.blogs= res.data.data,
+				res.data.data.forEach(blog => {
+					if(!blog.picture.startsWith('http')){
+						blog.picture = 'https://1.12.223.54/' + blog.picture
+					}
+					
+				})
+				console.log(this.blogs)
+				
+				},
+			
+         	fail: () => {},
+         	complete: () => {}
+         });
 		},
 		methods: {
 
@@ -32,29 +56,54 @@
 </script>
 
 <style>
-	.content {
+	.item-container{
+		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
+		width: 96%;
+		height: 2%;
+		margin-top: 10rpx ;
+		margin-bottom: 20rpx;
 		display: flex;
+		border-radius: 40rpx;
 		flex-direction: column;
-		align-items: center;
-		justify-content: center;
+		background-color: white,
+		
 	}
-
-	.logo {
-		height: 150rpx;
-		width: 300rpx;
-		margin-top: 200rpx;
-		margin-left: auto;
-		margin-right: auto;
-		margin-bottom: 50rpx;
+	.item-title{
+		font-size:25rpx ;
+		font-weight: bold;
+		padding-top: 10rpx;
+		padding-bottom: 5rpx;
+		border-bottom: darkgray 3px solid;
+		white-space: nowrap;
+		text-overflow:ellipsis;
+	    overflow: hidden;
+		margin-left: 70rpx;
+		margin-right: 30rpx;
+				
 	}
-
-	.text-area {
-		display: flex;
-		justify-content: center;
+	.item-desc{
+		font-size: 20rpx;
+		margin-left: 20rpx;
+		margin-right: 20rpx;
+		margin-bottom: 20rpx;
+		
 	}
-
-	.title {
-		font-size: 36rpx;
-		color: #8f8f94;
+		
+	.item-pic{
+		display: block;
+		margin: auto;
+		width: 96%;
+		border-radius: 8rpx;
+	}
+	.item-tag{
+		font-size: 12px;
+		color: #55aa00;
+		border:  2px solid;
+		border-radius: 20px;
+		float: left;
+		padding: 2px;
+		margin-top: 5px;
+		margin-bottom: 5px;
+		margin-left: 5px;
 	}
 </style>
