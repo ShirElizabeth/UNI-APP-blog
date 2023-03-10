@@ -19,8 +19,7 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		margin-top: 20rpx ;
-		margin-bottom: 20rpx;
+		
 		
 	}
 	
@@ -45,7 +44,7 @@
 	.img{
 		display: block;
 		margin: auto;
-		max-width: 100%;
-		max-height: 100%;
+		width: 96%;
+		border-radius: 8rpx;
 	}
 </style>

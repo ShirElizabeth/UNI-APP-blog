@@ -8,102 +8,129 @@
 			<image class="logo" src="../../static/icons/nodata.png" mode=""></image>
 			<text class="text-area">抱歉，找不到相关文章</text>
 		</view>
+
+
 		<view v-else class="item-container" v-for="(item,index) in blogs" :key="item.id">
 			<text class="item-title">{{item.title}}</text>
 			<rich-text :nodes="item.description" class="item-desc"></rich-text>
 			<image :src="item.picture" mode="widthFix" class="img itme-pic"></image>
+			<!-- 博客图片 -->
 			<view class="">
-				 <text class="item-tag" v-for="(tag,idx) in item.tags" :key="idx">{{tag}}</text>
+				<text class="item-tag" v-for="(tag,idx) in item.tags" :key="idx">{{tag}}</text>
 			</view>
-		</view>	
-	</view>	
+
+
+			<!-- 用户头像     aspectFill :                 -->
+			<image :src="item.user.avatar" mode="aspectFill" class="user-img"></image>
+
+
+			<view class="icon-container">
+				<image v-if="index%2 ==0" src="../../static/icons/ic_good.png" mode="" class="icon"></image>
+				<image v-else="index%2 ==0" src="../../static/icons/ic_good_fill.png" mode="" class="icon"></image>
+				<text class="icon-text">{{item.good}} </text>
+				<!-- 点赞 -->
+				<image src="../../static/icons//ic_comment.png" mode="" class="icon"></image>
+				<text class="icon-text">{{item.comments.length}} </text>
+				<!-- 评论 -->
+				<image src="../../static/icons/ic_count.png" mode="" class="icon"></image>
+				<text class="icon-text">{{item.readCount}} </text>
+				<!-- 查看 -->
+			</view>
+
+
+		</view>
+	</view>
 </template>
 
 <script>
+	// 全局变量
+	let page = 0
+	let size = 3
+
+
 	export default {
 		data() {
 			return {
-				blogs: []
+				blogs: [],
+				count: -1
 			}
 		},
+		// onLoad() {
+		// 	// 快捷键ureq
+		//        uni.request({
+		//        	url: 'https://1.12.223.54/api/v1/blogs/',
+		//        	method: 'GET',
+		// 	sslVerify:false,
+		//        	data: {},
+		//        	success: res => {
+		// 		this.blogs= res.data.data,
+		// 		res.data.data.forEach(blog => {
+		// 			if(!blog.picture.startsWith('http')){
+		// 				blog.picture = 'https://1.12.223.54/' + blog.picture
+		// 			}
+		// 			blog.user.avatar = 'https://1.12.223.54/' + blog.user.avatar
+
+		// 		})
+		// 		this.blogs = res.data.data
+		// 		console.log(this.blogs)
+
+		// 		},
+
+		//        	fail: () => {},
+		//        	complete: () => {}
+		//        });
 		onLoad() {
-			// 快捷键ureq
-         uni.request({
-         	url: 'https://1.12.223.54/api/v1/blogs/',
-         	method: 'GET',
-			sslVerify:false,
-         	data: {},
-         	success: res => {
-				this.blogs= res.data.data,
-				res.data.data.forEach(blog => {
-					if(!blog.picture.startsWith('http')){
-						blog.picture = 'https://1.12.223.54/' + blog.picture
-					}
-					
+			this.getPagedBlogs()
+		},
+		onPullDownRefresh() {
+			page = 0 
+			this.blogs = []
+			this.count = -1
+			this.getPagedBlogs()
+		},
+		onReachBottom() {
+			if(this.blogs.length == this.count){
+				uni.showToast({
+					title:"已全部加载完成"
 				})
-				console.log(this.blogs)
-				
-				},
-			
-         	fail: () => {},
-         	complete: () => {}
-         });
+				return
+			}
+			page +=1 
+			this.getPagedBlogs()
 		},
 		methods: {
+			getPagedBlogs() {
+				// if(this.blogs.length == this.count){
+				// 	uni.showToast({
+				// 		title:"已全部加载完成"
+				// 	})
+				// 	return
+				// }
+				let header = {
+					"content-type": "application/json;charset=UTF-8",
+					"page": page,
+					"size": size
 
+				}
+				this.$request.getWithHeader(this.$params.host + this.$params.action_blogs_page, header, res => {
+					res.data.forEach(blog => {
+						if (!blog.picture.startsWith("http")) {
+							blog.picture = this.$params.host + blog.picture
+						}
+						blog.user.avatar = this.$params.host + blog.user.avatar
+
+					})
+				
+					this.blogs = [...this.blogs,...res.data]
+					this.count =parseInt((res.message))
+				}, () => {
+					uni.stopPullDownRefresh()
+				})
+			}
 		}
 	}
 </script>
 
 <style>
-	.item-container{
-		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
-		width: 96%;
-		height: 2%;
-		margin-top: 10rpx ;
-		margin-bottom: 20rpx;
-		display: flex;
-		border-radius: 40rpx;
-		flex-direction: column;
-		background-color: white,
-		
-	}
-	.item-title{
-		font-size:25rpx ;
-		font-weight: bold;
-		padding-top: 10rpx;
-		padding-bottom: 5rpx;
-		border-bottom: darkgray 3px solid;
-		white-space: nowrap;
-		text-overflow:ellipsis;
-	    overflow: hidden;
-		margin-left: 70rpx;
-		margin-right: 30rpx;
-				
-	}
-	.item-desc{
-		font-size: 20rpx;
-		margin-left: 20rpx;
-		margin-right: 20rpx;
-		margin-bottom: 20rpx;
-		
-	}
-		
-	.item-pic{
-		display: block;
-		margin: auto;
-		width: 96%;
-		border-radius: 8rpx;
-	}
-	.item-tag{
-		font-size: 12px;
-		color: #55aa00;
-		border:  2px solid;
-		border-radius: 20px;
-		float: left;
-		padding: 2px;
-		margin-top: 5px;
-		margin-bottom: 5px;
-		margin-left: 5px;
-	}
+	@import url("index.css");
 </style>
