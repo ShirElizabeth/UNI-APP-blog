@@ -1,7 +1,7 @@
 /**
  * 一半的GET请求不带参数
  * @param {String} url url接口
- * @param {function} funSuccess 成功的回调
+ * @param {function} funSuccess 成功的回调 
  * @param {function} funFail 失败的回调
  */
 function get(url,funSuccess,funFail){
@@ -26,6 +26,7 @@ function get(url,funSuccess,funFail){
 	});
 }
 /**
+ * 问题：现在我们的上次课有些网络请求的方法  不想每次用到都要写一次     封装好每次都可以用    过程和步骤是什么
  * GET请求，需要用户传递Header
  * @param {String} url 要请求的接口地址
  * @param {JSON} header 请求头，包含参数，若无参数可以使用get方法
@@ -35,7 +36,7 @@ function get(url,funSuccess,funFail){
 
 function getWithHeader(url,header,funSuccess,funFail){
 	uni.showLoading({
-		title:"加载中...",
+		title:"加载中......",
 		mask:false
 	});
 	uni.request({

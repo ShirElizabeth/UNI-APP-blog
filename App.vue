@@ -1,4 +1,5 @@
 <script>
+	
 	export default {
 		onLaunch: function() {
 			console.log('App Launch')
@@ -13,7 +14,9 @@
 </script>
 
 <style>
+	 @import url("/iconfont/iconfont.css");
 	/*每个页面公共css */
+	/* @import url("/common/iconfont.css"); */
 	.content {
 		display: flex;
 		flex-direction: column;

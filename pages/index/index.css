@@ -78,3 +78,28 @@
 		margin-right: 20rpx;
 		
 	}
+	/* .fenxiang{
+		width: 50rpx;
+		height: 50rpx;
+		position:absolute;//绝对定位
+		border-radius: 50%;
+		right: 20px;//向右
+		margin-top: 3px;
+	} */
+	.img-iconfont{
+			width: 50rpx;
+			height: 50rpx;
+			position:absolute;//绝对定位
+		    color: pink;
+			right: 20px;//向右
+			margin-top: 6px;
+	}
+	.uni-searchbar{
+		width: 96%;
+		margin: auto;
+	}
+	
+	.bottom-view{
+	   /* 底部视图  目前没有设置CSS */
+		
+	}
