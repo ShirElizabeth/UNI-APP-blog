@@ -1,10 +1,11 @@
 <template>
 
 	<view class="content">
-		
+			   <!--@confirm="search" 搜索  -->
+		  <!--@clear="clearKeyword" 清空  -->	
 		<uni-search-bar placeholder="请输入关键字搜索" class="uni-searchbar" cancel-button="none" radius="50"
 		 @confirm="search" @clear="clearKeyword" />
-			<!-- 实现搜索框 -->
+			<!-- 引入插件 使用uni-search-bar实现搜索框 -->
 		
 		
 		<view v-if="blogs.length == 0" class="none">
@@ -17,6 +18,7 @@
 			<text class="item-title">{{item.title}}</text>
 			<rich-text :nodes="item.description" class="item-desc"></rich-text>
 			<image :src="item.picture" mode="widthFix" class="img itme-pic"></image>
+			
 			<!-- 博客图片 -->
 			<view class="">
 				<text class="item-tag" v-for="(tag,idx) in item.tags" :key="idx">{{tag}}</text>
@@ -25,18 +27,19 @@
 
 			<!-- 用户头像     aspectFill :                 -->
 			<image :src="item.user.avatar" mode="aspectFill" class="user-img"></image>
-<!--            <image src="../../static/icons/ic_share.png" class="fenxiang" mode="widthFix"></image>
- -->           <!-- <i class="iconfont">&#xe603;</i> -->
 			
 			
 			
+			<!-- 右上角iconfont图标 -->
+		<!-- 前面加 iconfont   不要加上:before -->
+		<!-- .icon-fenxiang:before -->
+		<!-- <text class="iconfont icon-wodedizhi "></text>  主页小图标 未完成 -->
 			<text class="iconfont icon-fenxiang img-iconfont"></text>
-			 <!-- 前面加 iconfont   不要加上:before -->
-			<!-- .icon-fenxiang:before -->
-			<!-- <text class="iconfont icon-wodedizhi "></text>  主页小图标 未完成 -->
+			<!-- 右上角iconfont图标 --> 
 			
 			
 			
+			 <!-- 点赞 --><!-- 点赞 --><!-- 点赞 --><!-- 点赞 --><!-- 点赞 --><!-- 点赞 --><!-- 点赞 --><!-- 点赞 --><!-- 点赞 -->
 			<view class="icon-container">
 				<image v-if="index%2 ==0" src="../../static/icons/ic_good.png" mode="" class="icon"></image>
 				<image v-else="index%2 ==0" src="../../static/icons/ic_good_fill.png" mode="" class="icon"></image>
@@ -49,7 +52,10 @@
 				<text class="icon-text">{{item.readCount}} </text>
 				<!-- 查看 -->
 			</view>
+			<!-- 点赞 --><!-- 点赞 --><!-- 点赞 --><!-- 点赞 --><!-- 点赞 --><!-- 点赞 --><!-- 点赞 --><!-- 点赞 --><!-- 点赞 -->
 					</view>
+		
+		
 		
 		<view v-if="blogs.length == count" class="bottom-view">
 			<image src="../../static/icons/bottom-view.png" mode=""></image>
@@ -122,15 +128,18 @@
 				})
 			},
 			// 对应方法
+			// 实现搜素请求
 			search(e){
 			  
 				//控制台可以得到搜索值
 				// console.log(e.value)
 				let kw = e.value
-				if(kw.length > 0 ){  //验证内容是否为空
-					//1.清空列表数据  2.重置count 3.发起请求 3.1.要在常亮文件中添加搜索地址3.2.使用get方法发起请求，3.3.请求的结果要经过处理
+				if(kw.length > 0 ){  //验证搜索栏内容是否为空
+					//1.清空列表数据   3.发起请求 3.1.要在常亮文件中添加搜索地址3.2.使用get方法发起请求，3.3.请求的结果要经过处理
 					this.blogs = []
+					// 2.重置count
 					this.count=-1
+					// 发起请求 要在常量文件中添加搜索地址 使用get 万法发起请求 处理请求结果
 					let url = this.$params.host + this.$params.action_search + kw
 					this.$request.get(url,res =>{
 						res.data.forEach(blog => {
@@ -141,7 +150,7 @@
 							})						
 							this.blogs = [...this.blogs,...res.data]						
 						}, () => {
-							
+							this.getPagedBlogs=true
 						})					
 					}					
 				},	
