@@ -24,9 +24,10 @@ function get(url,funSuccess,funFail){
 		},
 		complete: () => {}
 	});
+	
 }
 /**
- * 问题：现在我们的上次课有些网络请求的方法  不想每次用到都要写一次     封装好每次都可以用    过程和步骤是什么
+ * 
  * GET请求，需要用户传递Header
  * @param {String} url 要请求的接口地址
  * @param {JSON} header 请求头，包含参数，若无参数可以使用get方法
@@ -56,7 +57,7 @@ function getWithHeader(url,header,funSuccess,funFail){
 		}
 	});
 }
-module.exports = {
+module.exports = { //开放导出
 	get,
 	getWithHeader
 }
