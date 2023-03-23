@@ -4,5 +4,7 @@ export default{
 	action_hot:"api/v1/blogs/",
 	action_blogs_page:"api/v1/blogs/page",
 	action_search:"/api/v1/blogs/search/",
-		key_good_ids:"good_ids" 
+		key_good_ids:"good_ids" ,
+		action_good:"/api/v1/blogs/good/",
+		action_del_good:"/api/v1/blogs/delgood/"
 }	

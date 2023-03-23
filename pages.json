@@ -45,6 +45,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/blog/blog",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
