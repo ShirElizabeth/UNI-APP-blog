@@ -19,7 +19,7 @@
 		<!-- 如果 blogs 数组为空，则提示暂无相关文章 -->
 
 
-		<view v-else class="item-container" v-for="(item,index) in blogs" :key="item.id" @click.stop="gotoDetail()">
+		<view v-else class="item-container" v-for="(item,index) in blogs" :key="item.id" @click.stop="gotoDetail(item.id)">
 			<text class="item-title">{{item.title}}</text>
 			<rich-text :nodes="item.description" class="item-desc"></rich-text>
 			<image :src="item.picture" mode="widthFix" class="img itme-pic"></image>
@@ -107,7 +107,11 @@
 			} else {
 				this.getPagedBlogs()
 			}
+			
 		},
+		onUnload() {  //页面卸载
+					this.$noti.remove(this.$params.noti_refresh_count,this)  //移除通知    	3.28
+				},
 		onPullDownRefresh() { //下拉刷新后初始化
 			page = 0 //页数清零
 			this.blogs = [] //数据清零
@@ -132,31 +136,19 @@
 					
 				});
 			},
-			getPagedBlogs() {
-
-				let header = {
-					"content-type": "application/json;charset=UTF-8",
-					"page": page,
-					"size": size
-
-				}
-				this.$request.getWithHeader(this.$params.host + this.$params.action_blogs_page, header, res => {
-					res.data.forEach(blog => {
-						if (!blog.picture.startsWith("http")) {
-							blog.picture = this.$params.host + blog.picture
-						}
-						blog.user.avatar = this.$params.host + blog.user.avatar
-
-					})
-
-					this.blogs = [...this.blogs, ...res.data]
-					this.count = parseInt((res.message))
-
-					uni.setStorageSync(key_blogs, this.blogs); //保存数据到本地
-				}, () => {
-					uni.stopPullDownRefresh()
+			// 3.28
+			notifyRefreshCount(info){
+							let id = info.id
+							let count = info.count
+							this.refreshReadCount(id,count)    
+						},
+			refreshReadCount(id,count){
+				this.blogs.forEach(b =>{
+					if(b.id == id){
+						b.readCount = count
+					}
 				})
-			},
+			},			
 			changeGood(id, isGood) {
 				//TODO 同步到服务器，并且取最新数据			    
 				let url = this.$params.host
@@ -186,7 +178,30 @@
 					uni.setStorageSync(this.$params.key_good_ids, this.good_ids)
 				}, () => {})
 			},
+			getPagedBlogs() {
 			
+				let header = {
+					"content-type": "application/json;charset=UTF-8",
+					"page": page,
+					"size": size
+			
+				}
+				this.$request.getWithHeader(this.$params.host + this.$params.action_blogs_page, header, res => {
+					res.data.forEach(blog => {
+						if (!blog.picture.startsWith("http")) {
+							blog.picture = this.$params.host + blog.picture
+						}
+						blog.user.avatar = this.$params.host + blog.user.avatar
+			
+					})
+			
+					this.blogs = [...this.blogs, ...res.data]								
+					uni.setStorageSync(key_blogs, this.blogs); //保存数据到本地
+					this.count = parseInt((res.message))
+				}, () => {
+					uni.stopPullDownRefresh()
+				})
+			},
 
 
 			// <!-- 使用uni-app内置的组件search-bar实现搜索栏,给搜索栏组件绑定一个@confirm事件，当输入框中的内容发生变化时触发该事件。

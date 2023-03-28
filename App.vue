@@ -15,8 +15,16 @@
 
 <style>
 	 @import url("/iconfont/iconfont.css");
+	  @import url("");
 	/*每个页面公共css */
 	/* @import url("/common/iconfont.css"); */
+	.none{
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			margin-top: 20%;
+		}
 	.content {
 		display: flex;
 		flex-direction: column;
@@ -50,4 +58,18 @@
 		width: 96%;
 		border-radius: 8rpx;
 	}
+	.icon-container {
+			display: flex;
+			flex-direction: row;
+			border-top: darkgray 1px solid;
+			padding: 5rpx;
+			padding-left: 15rpx;
+		}
+		.icon {
+				width: 50rpx;
+				height: 50rpx;
+				font-size: 50rpx;
+				margin-top: 10rpx;
+				margin-right: 5rpx;
+			}
 </style>

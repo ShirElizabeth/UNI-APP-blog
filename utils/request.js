@@ -20,9 +20,12 @@ function get(url, funSuccess, funFail) {
 			funSuccess(res.data)
 		},
 		fail: err => {
-			funFail(err)
+	
 		},
-		complete: () => {}
+		complete: () => {
+			uni.hideLoading();
+			funFail();
+		}
 	});
 
 }
@@ -35,7 +38,7 @@ function get(url, funSuccess, funFail) {
  * @param {function} funComplete 请求结束的回调，如果无需处理则传递一个空方法即可
  */
 
-function getWithHeader(url, header, funSuccess,funComplete) {
+function getWithHeader(url, header, funSuccess, funComplete) {
 	uni.showLoading({
 		title: "加载中......",
 		mask: false
@@ -53,37 +56,38 @@ function getWithHeader(url, header, funSuccess,funComplete) {
 		},
 		complete: () => {
 			uni.hideLoading();
-			funComplete()   //禁止反复加载
+			funComplete() //禁止反复加载
 		}
 	});
 }
-	function postParam(url,data,funSuccess,funComplete) {
-		uni.showLoading({
-			title: "提交数据...",
-			mask: false
-		});
-		uni.request({
-			url: url,
-			header: {
-				"Accept": "application/json; q=0.9,*/*; q=0.1",
-				"Content-Type":"application/x-www-form-urlencoded;charset=UTF-8"
-			},
-			method: "POST",
-			sslVerify: false,
-			data: data,																																																											
-			success: res => funSuccess(res.data),
-			fail: err => {
-				console.log(err);
-			},
-			complete: () => {
-				uni.hideLoading()
-				funComplete()
+// 在request.js中添加相应的post方法，并完成post数据到点赞接口的代码
+function postParam(url, data, funSuccess, funComplete) {
+	uni.showLoading({
+		title: "提交数据...",
+		mask: false
+	});
+	uni.request({
+		url: url,
+		header: {
+			"Accept": "application/json; q=0.9,*/*; q=0.1",
+			"Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+		},
+		method: "POST",
+		sslVerify: false,
+		data: data,
+		success: res => funSuccess(res.data),
+		fail: err => {
+			console.log(err);
+		},
+		complete: () => {
+			uni.hideLoading()
+			funComplete()
 
-			}
-		});
+		}
+	});
 }
 module.exports = { //开放导出
-		get,	
-		getWithHeader,
-		postParam
+	get,
+	getWithHeader,
+	postParam
 }
