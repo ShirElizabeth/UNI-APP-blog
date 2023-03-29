@@ -94,7 +94,7 @@
 
 
 		onLoad() {	//页面加载		
-				this.$noti.add(this.$params.noti_refresh_count,this.notifyRefreshCount,this)  //页面加载时注册通知3.29
+				// this.$noti.add(this.$params.noti_refresh_count,this.notifyRefreshCount,this)  //页面加载时注册通知3.29
 			let ids = uni.getStorageSync(this.$params.key_good_ids)
 			if (ids) {
 				this.good_ids = ids
