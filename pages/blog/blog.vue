@@ -13,10 +13,10 @@
 			<image :src="blog.user.avatar" mode="aspectFill" class="img-head"></image>
 			<!-- 点赞 -->
 			<view class="icon-container">
-				<image @click.stop="changeGood(blog.id, true)" v-if="hasGood" src="../../static/icons/ic_good.png"
+				
+				<image @click.stop="changeGood(blog.id, true)" v-if="hasGood" src="../../static/icons/ic_good_fill.png"
 					class="icon"></image>
-				<image @click.stop="changeGood(blog.id, false)" v-else src="../../static/icons/ic_good_fill.png"
-					class="icon"></image>
+					<image @click.stop="changeGood(blog.id,false )"v-else  src="../../static/icons/ic_good.png"class="icon"></image>
 				<text class="icon-text">{{blog.good}}</text>
 				<!-- 点赞 -->
 				<image src="../../static/icons//ic_comment.png" mode="" class="icon"></image>
@@ -55,6 +55,7 @@
 				let data = {
 					"id": id
 				}
+				
 				this.$request.postParam(url, data, res => {
 					let count = res.data
 					//第一种方式，获取上一页面实例
@@ -64,6 +65,8 @@
 						id,
 						count
 					})
+					console.log(id);
+					console.log(count);	
 				}, () => {
 
 					this.getBlog(id)

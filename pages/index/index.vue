@@ -61,7 +61,7 @@
 			</view>
 			<!-- 点赞 -->
 
-		</view>
+		</view>	
 
 		<!-- 判断 blogs 数组的长度是否达到预设值 count，是则提示到达底部 -->
 		<view v-if="blogs.length >= count" class="bottom-view">
@@ -93,8 +93,8 @@
 		},
 
 
-		onLoad() {
-			//缓存点赞数据
+		onLoad() {	//页面加载		
+				this.$noti.add(this.$params.noti_refresh_count,this.notifyRefreshCount,this)  //页面加载时注册通知3.29
 			let ids = uni.getStorageSync(this.$params.key_good_ids)
 			if (ids) {
 				this.good_ids = ids
@@ -142,6 +142,7 @@
 							let count = info.count
 							this.refreshReadCount(id,count)    
 						},
+						// 添加更新列表项阅读次数的函数  refreshReadCount(id, count)
 			refreshReadCount(id,count){
 				this.blogs.forEach(b =>{
 					if(b.id == id){
