@@ -58,7 +58,7 @@
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "首页",
-		"navigationBarBackgroundColor": "#55aa00",
+		"navigationBarBackgroundColor": "pink",
 		"backgroundColor": "#F8F8F8"
 		
 	},

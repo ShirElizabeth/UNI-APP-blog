@@ -53,23 +53,51 @@
 					</view>
 					<view v-if="index < parents.length -1" class="cmt-line"></view>
 				</view>
+
 			</view>
+
+
+
+			<image src="../../static/icons/汉堡包.jpg" mode="aspectFill"></image>
+			<!-- <view class="huifu">
+			<!-- 	auto-height 是否自动增高，设置auto-height时，style.height不生效 -->
+			<!-- maxlength="300" 最大字数三百 -->
+
+			<!-- <textarea class="huifupinglun" auto-height maxlength="300"  v-model="replyContent"
+				 placeholder="请输入回复内容" name="" id="" cols="30" rows="10"  inputmode="text"  type="text"  >
+				 
+				 </textarea> -->
+			<!-- <button class="PLfasong">发送</button> -->
+			<!-- </view> -->
+
+
+
+			<!-- 	<view>
+				
+				<view>
+					
+					<textarea class="if-textarea" @focus="onTextareaFocus" @blur="onTextareaBlur":class="{ 'if-textarea-active': 'isTextareaActive' }" 
+					v-model="comment" auto-height placeholder="请输入评论"></textarea>
+
+					
+				</view>
+		 </view> -->
 			
-			
-			
-			
-			<view class="huifu">
-				<image src="../../static/icons/汉堡包.jpg" mode="aspectFill"></image>
-				<input type="text" placeholder="请输入回复内容">
+<view :class="isClicked ? 'style2' : 'style1'" @click="toggleStyle">
+				<textarea placeholder="请输入评论" ></textarea>
+			<!-- <button class="PLfasong">发送</button> -->
+			<image src="../../static/icons/commit.png" mode=""></image>
 			</view>
-			
+
+
+
 		</view>
-	
+
 	</view>
 </template>
-
 <script>
 	export default {
+
 		data() {
 			return {
 				blog: {},
@@ -77,7 +105,8 @@
 				loaded: false,
 				parents: [],
 				replies: [],
-				hasComment: false
+				hasComment: false,
+				   isClicked: false,
 			}
 		},
 		onLoad(options) { //获取id
@@ -89,6 +118,9 @@
 			this.addReadCount(id)
 		},
 		methods: {
+		  toggleStyle() {
+		      this.isClicked = !this.isClicked;
+		    },
 			addReadCount(id) {
 				let url = this.$params.host + this.$params.action_read_count
 				let data = {
