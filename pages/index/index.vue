@@ -31,7 +31,7 @@
 
 
 			<!-- 用户头像     aspectFill :                 -->
-			<image :src="item.user.avatar" mode="aspectFill" class="user-img"></image>
+			<image @click.stop="clickShowUser(item.user)"  :src="item.user.avatar" mode="aspectFill" class="user-img"></image>
 
 
 			<!-- 右上角iconfont图标 -->
@@ -67,7 +67,13 @@
 		<view v-if="blogs.length >= count" class="bottom-view">
 			<image src="../../static/icons/bottom-view.png" mode=""></image>
 		</view>
-
+		
+		
+   <dialog-shell ref="shell" title="列表页" confirmText="确定">
+	   
+	   <text style="padding: 10rpx; font-size: 25rpx;">{{userDecs}}</text>
+	   
+	   </dialog-shell>	
 	</view>
 </template>
 
@@ -88,7 +94,8 @@
 				blogs: [], //数据存放的数组
 				count: -1, //保存返回的总数据条数
 				searching: false, //是否正在搜索
-				good_ids: []
+				good_ids: [],
+				userDecs:""
 			}
 		},
 
@@ -127,6 +134,10 @@
 			this.getPagedBlogs()
 		},
 		methods: {
+			clickShowUser(user){
+				this.userDecs = "作者" +user.nickName +"\n联系方式" +user.email
+				this.$refs.shell.show()
+			},
 			gotoDetail(id) {				//去详情页
 				uni.navigateTo({
 					url: '../blog/blog?id=' +id,
@@ -286,9 +297,10 @@
 				uni.showToast({
 					title:'未登录，不能删除'
 				});
-			}
+			},
 			
 			
+		
 		}
 	}
 </script>

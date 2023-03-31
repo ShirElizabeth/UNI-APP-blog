@@ -10,7 +10,7 @@
 				<text class="item-tag" v-for="(tag,idx) in blog.tags" :key="idx">{{tag}}</text>
 			</view>
 			<!-- 用户头像     aspectFill :                 -->
-			<image :src="blog.user.avatar" mode="aspectFill" class="img-head"></image>
+			<image  :src="blog.user.avatar" mode="aspectFill" class="img-head"></image>
 			<!-- 点赞 -->
 			<view class="icon-container">
 
@@ -28,7 +28,7 @@
 				<text class="icon-text">{{blog.readCount}} </text>
 
 			</view>
-
+<!-- @click.stop="clickShowUser(blog.user)" -->
 			<view v-if="hasComment" class="blog-container">
 				<view v-for="(item,index) in parents" :key="item.id">
 					<view class="parent-container">
@@ -37,8 +37,8 @@
 							<text class="cmt-time">{{item.createTime}}</text>
 							<text v-if="canDelete(item)" class="txt-delete">[删除]</text>
 						</view>
-						<image :src="item.avatar" mode="aspectFill" class="cmt-avatar"></image>
-						<text class="cmt-content">{{item.content}}</text>
+						<image @click.stop="clickShowUser(item)" :src="item.avatar" mode="aspectFill" class="cmt-avatar"></image>
+						<text class="cmt-content" @click="clickToReply(item)">{{item.content}}</text>
 					</view>
 					<view v-if="replies[index].length >0" class="replies-container">
 						<view v-for="(reply,idx) in replies[index]" :key="reply.id" class="reply-item">
@@ -48,7 +48,7 @@
 								<text class="cmt-time">{{reply.createTime}}</text>
 								<text v-if="canDelete(reply)" class="txt-delete">[删除]</text>
 							</view>
-							<text class="reply-content">{{reply.content}}</text>
+							<text @click="clickToReply(reply)" class="reply-content">{{reply.content}}</text>
 						</view>
 					</view>
 					<view v-if="index < parents.length -1" class="cmt-line"></view>
@@ -56,9 +56,10 @@
 
 			</view>
 
-
-
-			<image src="../../static/icons/汉堡包.jpg" mode="aspectFill"></image>
+			<view class="SYPL">
+				<text class="SYPLtext">已显示所有评论</text>
+			</view>
+			<!-- <image src="../../static/icons/汉堡包.jpg" mode="aspectFill"></image> -->
 			<!-- <view class="huifu">
 			<!-- 	auto-height 是否自动增高，设置auto-height时，style.height不生效 -->
 			<!-- maxlength="300" 最大字数三百 -->
@@ -70,25 +71,19 @@
 			<!-- <button class="PLfasong">发送</button> -->
 			<!-- </view> -->
 
-
-
-			<!-- 	<view>
-				
-				<view>
-					
-					<textarea class="if-textarea" @focus="onTextareaFocus" @blur="onTextareaBlur":class="{ 'if-textarea-active': 'isTextareaActive' }" 
-					v-model="comment" auto-height placeholder="请输入评论"></textarea>
-
-					
-				</view>
-		 </view> -->
-			
-<view :class="isClicked ? 'style2' : 'style1'" @click="toggleStyle">
-				<textarea placeholder="请输入评论" ></textarea>
-			<!-- <button class="PLfasong">发送</button> -->
-			<image src="../../static/icons/commit.png" mode=""></image>
+			<view class="input-container">
+				<image src="../../static/icons/default_user.png" mode="aspectFill" class="input-avatar"></image>
+				<textarea auto-height v-model="inputValue" :placeholder="inputHolder" class="input-area"
+					placeholder-class="input-holder" />
+				<image src="../../static/icons/commit.png" class="input-commit"></image>
 			</view>
 
+
+ <dialog-shell ref="shell" title="列表页" confirmText="确定">
+	   
+	   <text style="padding: 10rpx; font-size: 25rpx;">{{userDecs}}</text>
+	   
+	   </dialog-shell>	
 
 
 		</view>
@@ -96,6 +91,8 @@
 	</view>
 </template>
 <script>
+	let parentId = null
+	let cmtValue = ""
 	export default {
 
 		data() {
@@ -106,7 +103,9 @@
 				parents: [],
 				replies: [],
 				hasComment: false,
-				   isClicked: false,
+				inputValue:"",
+				inputHolder: "请输入内容",
+				userDecs:""
 			}
 		},
 		onLoad(options) { //获取id
@@ -118,9 +117,10 @@
 			this.addReadCount(id)
 		},
 		methods: {
-		  toggleStyle() {
-		      this.isClicked = !this.isClicked;
-		    },
+clickShowUser(user){
+				this.userDecs = "作者" +user.nickName +"\n联系方式" +user.email
+				this.$refs.shell.show()
+			},
 			addReadCount(id) {
 				let url = this.$params.host + this.$params.action_read_count
 				let data = {
@@ -209,6 +209,14 @@
 			},
 			canDelete(item, reply) {
 				return true;
+			},
+			clickToReply(item) {
+				parentId = item.id
+				this.inputHolder = "@" + item.nickName
+			},
+			inputGetVakue(e) {
+				cmtValue = e.detail.cmtValue
+				console.log(cmtValue);
 			}
 		}
 	}
