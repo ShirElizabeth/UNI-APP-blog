@@ -19,26 +19,28 @@
 		<!-- 如果 blogs 数组为空，则提示暂无相关文章 -->
 
 
-		<view v-else class="item-container" v-for="(item,index) in blogs" :key="item.id" @click.stop="gotoDetail(item.id)">
+		<view v-else class="item-container" v-for="(item,index) in blogs" :key="item.id"
+			@click.stop="gotoDetail(item.id)">
 			<text class="item-title">{{item.title}}</text>
 			<rich-text :nodes="item.description" class="item-desc"></rich-text>
 			<image :src="item.picture" mode="widthFix" class="img itme-pic"></image>
 
 			<!-- 博客图片 -->
 			<view class="">
-				<text  class="item-tag" v-for="(tag,idx) in item.tags" :key="idx">{{tag}}</text>
+				<text class="item-tag" v-for="(tag,idx) in item.tags" :key="idx">{{tag}}</text>
 			</view>
 
 
 			<!-- 用户头像     aspectFill :                 -->
-			<image @click.stop="clickShowUser(item.user)"  :src="item.user.avatar" mode="aspectFill" class="user-img"></image>
+			<image @click.stop="clickShowUser(item.user)" :src="item.user.avatar" mode="aspectFill" class="user-img">
+			</image>
 
 
 			<!-- 右上角iconfont图标 -->
 			<!-- 前面加 iconfont   不要加上:before -->
 			<!-- .icon-fenxiang:before -->
 			<!-- <text class="iconfont icon-wodedizhi "></text>  主页小图标 未完成 -->
-			<text @click.stop="popSheet(item.id)"  class="iconfont icon-fenxiang img-iconfont" ></text>
+			<text @click.stop="popSheet(item.id)" class="iconfont icon-fenxiang img-iconfont"></text>
 			<!-- 右上角iconfont图标 -->
 
 
@@ -61,19 +63,19 @@
 			</view>
 			<!-- 点赞 -->
 
-		</view>	
+		</view>
 
 		<!-- 判断 blogs 数组的长度是否达到预设值 count，是则提示到达底部 -->
 		<view v-if="blogs.length >= count" class="bottom-view">
 			<image src="../../static/icons/bottom-view.png" mode=""></image>
 		</view>
-		
-		
-   <dialog-shell ref="shell" title="列表页" confirmText="确定">
-	   
-	   <text style="padding: 10rpx; font-size: 25rpx;">{{userDecs}}</text>
-	   
-	   </dialog-shell>	
+
+
+		<dialog-shell ref="shell" title="列表页" confirmText="确定">
+
+			<text style="padding: 10rpx; font-size: 25rpx;">{{userDecs}}</text>
+
+		</dialog-shell>
 	</view>
 </template>
 
@@ -95,13 +97,13 @@
 				count: -1, //保存返回的总数据条数
 				searching: false, //是否正在搜索
 				good_ids: [],
-				userDecs:""
+				userDecs: ""
 			}
 		},
 
 
-		onLoad() {	//页面加载		
-				// this.$noti.add(this.$params.noti_refresh_count,this.notifyRefreshCount,this)  //页面加载时注册通知3.29
+		onLoad() { //页面加载		
+			// this.$noti.add(this.$params.noti_refresh_count,this.notifyRefreshCount,this)  //页面加载时注册通知3.29
 			let ids = uni.getStorageSync(this.$params.key_good_ids)
 			if (ids) {
 				this.good_ids = ids
@@ -114,11 +116,11 @@
 			} else {
 				this.getPagedBlogs()
 			}
-			
+
 		},
-		onUnload() {  //页面卸载
-					this.$noti.remove(this.$params.noti_refresh_count,this)  //移除通知    	3.28
-				},
+		onUnload() { //页面卸载
+			this.$noti.remove(this.$params.noti_refresh_count, this) //移除通知    	3.28
+		},
 		onPullDownRefresh() { //下拉刷新后初始化
 			page = 0 //页数清零
 			this.blogs = [] //数据清零
@@ -134,69 +136,69 @@
 			this.getPagedBlogs()
 		},
 		methods: {
-			clickShowUser(user){
-				this.userDecs = "作者" +user.nickName +"\n联系方式" +user.email
+			clickShowUser(user) {
+				this.userDecs = "作者" + user.nickName + "\n联系方式" + user.email
 				this.$refs.shell.show()
 			},
-			gotoDetail(id) {				//去详情页
+			gotoDetail(id) { //去详情页
 				uni.navigateTo({
-					url: '../blog/blog?id=' +id,
+					url: '../blog/blog?id=' + id,
 					success: res => {},
 					fail: () => {},
-						complete: () => {}
-					
+					complete: () => {}
+
 				});
 			},
 			// 3.28
-			notifyRefreshCount(info){
-							let id = info.id
-							let count = info.count
-							this.refreshReadCount(id,count)    
-						},
-						// 添加更新列表项阅读次数的函数  refreshReadCount(id, count)
-			refreshReadCount(id,count){
-				this.blogs.forEach(b =>{
-					if(b.id == id){
+			notifyRefreshCount(info) {
+				let id = info.id
+				let count = info.count
+				this.refreshReadCount(id, count)
+			},
+			// 添加更新列表项阅读次数的函数  refreshReadCount(id, count)
+			refreshReadCount(id, count) {
+				this.blogs.forEach(b => {
+					if (b.id == id) {
 						b.readCount = count
 					}
 				})
-			},			
+			},
 			changeGood(id, isGood) {
-				//TODO 同步到服务器，并且取最新数据			    
+				//TODO:同步到服务器，并且取最新数据
 				let url = this.$params.host
-				let action = isGood ? this.$params.action_good : this.$params.adtion_del_good
+				let action = isGood ? this.$params.action_good : this.$params.action_del_good
 				url += action
 				let data = {
 					"id": id
 				}
 				this.$request.postParam(url, data, res => {
+					// console.log(res);
 					this.blogs.forEach(blog => {
 						if (blog.id == id) {
-							console.log(blog);
 							blog.good = res.data
 						}
 					})
 					if (isGood) {
-						this.good_ids.push(id)
+						this.good_ids.push(id);
 						// this.good_ids = this.good_ids.concat(id)
 					} else {
-						let index = this.good_ids.indexOf(id)
-						//shift 删除第一个元素，pop删除最后一个元素，splice删除指定位置元素
+						let index = this.good_ids.indexOf(id);
+						//取消点赞,shift 删除第一个元素，pop删除最后一个元素，splice删除指定位置元素
 						//pop,把最后一个元素替换要删除的元素，然后pop [1,2,3,4,5]
 						//数字较大且顺序不影响程序功能，可提高性能
 						// this.good_ids.splice(index, 1)
-						this.$utli.remove(this.good_ids, index)
+						this.$util.remove(this.good_ids, index)
 					}
-					uni.setStorageSync(this.$params.key_good_ids, this.good_ids)
+					uni.setStorageSync(this.$params.key_good_ids, this.good_ids);
 				}, () => {})
 			},
 			getPagedBlogs() {
-			
+
 				let header = {
 					"content-type": "application/json;charset=UTF-8",
 					"page": page,
 					"size": size
-			
+
 				}
 				this.$request.getWithHeader(this.$params.host + this.$params.action_blogs_page, header, res => {
 					res.data.forEach(blog => {
@@ -204,10 +206,10 @@
 							blog.picture = this.$params.host + blog.picture
 						}
 						blog.user.avatar = this.$params.host + blog.user.avatar
-			
+
 					})
-			
-					this.blogs = [...this.blogs, ...res.data]								
+
+					this.blogs = [...this.blogs, ...res.data]
 					uni.setStorageSync(key_blogs, this.blogs); //保存数据到本地
 					this.count = parseInt((res.message))
 				}, () => {
@@ -276,8 +278,8 @@
 								showCancel: true,
 								confirmText: "确认",
 								success: res => {
-								cancelText: "取消",
-							
+									cancelText: "取消",
+
 									this.deleteBlog(id)
 								},
 								fail: () => {},
@@ -291,16 +293,16 @@
 					},
 					fail: () => {},
 					complete: () => {}
-				});												
-			},
-			deleteBlog(id){
-				uni.showToast({
-					title:'未登录，不能删除'
 				});
 			},
-			
-			
-		
+			deleteBlog(id) {
+				uni.showToast({
+					title: '未登录，不能删除'
+				});
+			},
+
+
+
 		}
 	}
 </script>

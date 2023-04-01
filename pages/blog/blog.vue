@@ -10,13 +10,13 @@
 				<text class="item-tag" v-for="(tag,idx) in blog.tags" :key="idx">{{tag}}</text>
 			</view>
 			<!-- 用户头像     aspectFill :                 -->
-			<image  :src="blog.user.avatar" mode="aspectFill" class="img-head"></image>
+			<image :src="blog.user.avatar" mode="aspectFill" class="img-head"></image>
 			<!-- 点赞 -->
 			<view class="icon-container">
 
-				<image @click.stop="changeGood(blog.id, true)" v-if="hasGood" src="../../static/icons/ic_good_fill.png"
+				<image @click.stop="changeGood(blog.id, true)" v-if="good_ids.indexOf(blog.id) < 0" src="../../static/icons/ic_good.png"
 					class="icon"></image>
-				<image @click.stop="changeGood(blog.id,false )" v-else src="../../static/icons/ic_good.png"
+				<image @click.stop="changeGood(blog.id,false )" v-else src="../../static/icons/ic_good_fill.png"
 					class="icon"></image>
 				<text class="icon-text">{{blog.good}}</text>
 				<!-- 点赞 -->
@@ -28,7 +28,7 @@
 				<text class="icon-text">{{blog.readCount}} </text>
 
 			</view>
-<!-- @click.stop="clickShowUser(blog.user)" -->
+			<!-- @click.stop="clickShowUser(blog.user)" -->
 			<view v-if="hasComment" class="blog-container">
 				<view v-for="(item,index) in parents" :key="item.id">
 					<view class="parent-container">
@@ -37,7 +37,8 @@
 							<text class="cmt-time">{{item.createTime}}</text>
 							<text v-if="canDelete(item)" class="txt-delete">[删除]</text>
 						</view>
-						<image @click.stop="clickShowUser(item)" :src="item.avatar" mode="aspectFill" class="cmt-avatar"></image>
+						<image @click.stop="clickShowUser(item)" :src="item.avatar" mode="aspectFill"
+							class="cmt-avatar"></image>
 						<text class="cmt-content" @click="clickToReply(item)">{{item.content}}</text>
 					</view>
 					<view v-if="replies[index].length >0" class="replies-container">
@@ -79,11 +80,11 @@
 			</view>
 
 
- <dialog-shell ref="shell" title="列表页" confirmText="确定">
-	   
-	   <text style="padding: 10rpx; font-size: 25rpx;">{{userDecs}}</text>
-	   
-	   </dialog-shell>	
+			<dialog-shell ref="shell" title="列表页" confirmText="确定">
+
+				<text style="padding: 10rpx; font-size: 25rpx;">{{userDecs}}</text>
+
+			</dialog-shell>
 
 
 		</view>
@@ -99,13 +100,14 @@
 			return {
 				blog: {},
 				hasGood: false,
+				good_ids:[],
 				loaded: false,
 				parents: [],
 				replies: [],
 				hasComment: false,
-				inputValue:"",
+				inputValue: "",
 				inputHolder: "请输入内容",
-				userDecs:""
+				userDecs: ""
 			}
 		},
 		onLoad(options) { //获取id
@@ -117,8 +119,8 @@
 			this.addReadCount(id)
 		},
 		methods: {
-clickShowUser(user){
-				this.userDecs = "作者" +user.nickName +"\n联系方式" +user.email
+			clickShowUser(user) {
+				this.userDecs = "作者" + user.nickName + "\n联系方式" + user.email
 				this.$refs.shell.show()
 			},
 			addReadCount(id) {
@@ -143,7 +145,26 @@ clickShowUser(user){
 					this.getBlog(id)
 				})
 			},
-
+changeGood(id, hasGood) {
+				//同步到服务器,并且去最新数据
+				let url = this.$params.host
+				let action = hasGood ? this.$params.action_good : this.$params.action_del_good
+				url += action
+				let data = {
+					"id" : id
+				}
+				this.$request.postParam(url,data,res => {
+					this.blog.good = res.data
+					if (hasGood) {
+					    this.good_ids.push(id);
+						// this.good_ids = this.good_ids.concat(id)
+					  } else {
+					    let index = this.good_ids.indexOf(id);
+						this.$util.remove(this.good_ids,index)
+					  }
+					uni.setStorageSync(this.$params.key_good_ids, this.good_ids);
+				},() => {})
+			},
 			getBlog(id) {
 				let url = this.$params.host + this.$params.action_blog + id
 				this.$request.get(url, res => {

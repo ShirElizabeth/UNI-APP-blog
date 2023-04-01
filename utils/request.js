@@ -4,7 +4,7 @@
  * @param {function} funSuccess 成功的回调 
  * @param {function} funFail 失败的回调
  */
-function get(url, funSuccess, funFail) {
+function get(url, funSuccess, funComplete) {
 	uni.showLoading({
 		title: "加载中...",
 		mask: false,
@@ -24,7 +24,7 @@ function get(url, funSuccess, funFail) {
 		},
 		complete: () => {
 			uni.hideLoading();
-			funFail();
+			funComplete	();
 		}
 	});
 
