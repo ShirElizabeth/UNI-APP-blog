@@ -10,5 +10,7 @@ export default {
 	action_read_count: "api/v1/blogs/read",
 	action_blog: "api/v1/blogs/",
 	key_good_ids: "good_ids",
-	noti_refresh_count: "noti_refresh_count"
+	noti_refresh_count: "noti_refresh_count",
+	action_login:"api/v1/login",
+	
 }

@@ -20,11 +20,11 @@ function get(url, funSuccess, funComplete) {
 			funSuccess(res.data)
 		},
 		fail: err => {
-	
+
 		},
 		complete: () => {
 			uni.hideLoading();
-			funComplete	();
+			funComplete();
 		}
 	});
 
@@ -86,8 +86,37 @@ function postParam(url, data, funSuccess, funComplete) {
 		}
 	});
 }
+	/**
+	 * 
+	 * POST请求
+	 * @param {String} url 要请求的接口地址
+	 * @param {JSON} data要提交的数据
+	 * @param {function} funSuccess 成功的回调
+	 * @param {function} funComplete 请求结束的回调，如果无需处理则传递一个空方法即可
+	 */
+	function post(url, data, funSuccess, funComplete) {
+		uni.showLoading({
+			title: "提交数据...",
+			mask: false
+		});
+		uni.request({
+			url: url,
+			method: 'POST',
+			data: data,
+			success: res => funSuccess(res.data),
+			fail: err => {
+				console.log(err);
+			},
+			complete: () => {
+				uni.hideLoading()
+				funComplete()
+			}
+		});
+	}
+
 module.exports = { //开放导出
 	get,
 	getWithHeader,
-	postParam
+	postParam,
+	post
 }

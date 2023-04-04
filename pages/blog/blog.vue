@@ -13,11 +13,8 @@
 			<image :src="blog.user.avatar" mode="aspectFill" class="img-head"></image>
 			<!-- 点赞 -->
 			<view class="icon-container">
-
-				<image @click.stop="changeGood(blog.id, true)" v-if="good_ids.indexOf(blog.id) < 0" src="../../static/icons/ic_good.png"
-					class="icon"></image>
-				<image @click.stop="changeGood(blog.id,false )" v-else src="../../static/icons/ic_good_fill.png"
-					class="icon"></image>
+	<text   @click.stop="changeGood(blog.id, true)" v-if="good_ids.indexOf(blog.id) < 0"  class="icon">&#xe871;</text>
+	<text   @click.stop="changeGood(blog.id,false )" v-else  class="icon">&#xe870;</text>
 				<text class="icon-text">{{blog.good}}</text>
 				<!-- 点赞 -->
 				<image src="../../static/icons//ic_comment.png" mode="" class="icon"></image>
@@ -73,7 +70,7 @@
 			<!-- </view> -->
 
 			<view class="input-container">
-				<image src="../../static/icons/default_user.png" mode="aspectFill" class="input-avatar"></image>
+				<image @click.stop="clickLogin" src="../../static/icons/default_user.png" mode="aspectFill" class="input-avatar"></image>
 				<textarea auto-height v-model="inputValue" :placeholder="inputHolder" class="input-area"
 					placeholder-class="input-holder" />
 				<image src="../../static/icons/commit.png" class="input-commit"></image>
@@ -86,7 +83,10 @@
 
 			</dialog-shell>
 
-
+    <login-dialog ref="login" >
+		
+		
+	</login-dialog>
 		</view>
 
 	</view>
@@ -119,6 +119,9 @@
 			this.addReadCount(id)
 		},
 		methods: {
+			clickLogin(){
+			this.$refs.login.show()
+			},
 			clickShowUser(user) {
 				this.userDecs = "作者" + user.nickName + "\n联系方式" + user.email
 				this.$refs.shell.show()
