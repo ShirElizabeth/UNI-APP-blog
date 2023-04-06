@@ -67,23 +67,22 @@ function postParam(url, data, funSuccess, funComplete) {
 		mask: false
 	});
 	uni.request({
-		url: url,
-		header: {
-			"Accept": "application/json; q=0.9,*/*; q=0.1",
-			"Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
-		},
-		method: "POST",
-		sslVerify: false,
-		data: data,
-		success: res => funSuccess(res.data),
-		fail: err => {
-			console.log(err);
-		},
-		complete: () => {
-			uni.hideLoading()
-			funComplete()
-
-		}
+	  url: url,
+	  header: {
+	   "Accept": "application/json;q=0.9,*/*;q=0.1",
+	   "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+	  },
+	  method: 'POST',
+	  sslVerify: false,
+	  data: data,
+	  success: res => funSuccess(res.data),
+	  fail: err => {
+	   console.log(err);
+	  },
+	  complete: () => {
+	   uni.hideLoading()
+	   funComplete()
+	  }
 	});
 }
 	/**
@@ -99,6 +98,7 @@ function postParam(url, data, funSuccess, funComplete) {
 			title: "提交数据...",
 			mask: false
 		});
+		console.log(data);
 		uni.request({
 			url: url,
 			method: 'POST',
@@ -113,6 +113,7 @@ function postParam(url, data, funSuccess, funComplete) {
 			}
 		});
 	}
+	
 
 module.exports = { //开放导出
 	get,

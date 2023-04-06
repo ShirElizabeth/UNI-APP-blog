@@ -7,7 +7,8 @@
 
 
 			<view class="login-container">
-				<input placeholder-class="input-holder" :value="userValue" type="text" placeholder="username" @input="inputGetUser">
+				<input placeholder-class="input-holder" :value="userValue" type="text" placeholder="username"
+					@input="inputGetUser">
 				<text class="iconfont icon-yonghu img-iconfont"></text>
 			</view>
 
@@ -60,6 +61,7 @@
 			inputGetUser(e) {
 				this.userValue = e.detail.value
 			},
+			
 			confirmLogin() {
 				if (this.userValue.length == 0 || this.pwdValue.length == 0) {
 					uni.showToast({
@@ -75,8 +77,28 @@
 					password: this.pwdValue
 				}
 				this.$request.post(url, data, res => {
+					uni.showToast({
+						title: res.message,
+						icon: "none"
+					});
+					if (!res.success) {
+						this.$refs.shell.show()
+						this.userValue = ""
+						this.pwdValue = ""
+						return
+
+					}
 					uni.getStorageSync('userLoginInfo', data)
-					console.log(res);
+					let app = getApp()
+					app.globalData.uid = res.data.id
+					app.globalData.token = res.data.token
+					app.globalData.avatar = res.data.avatar
+					app.globalData.type = res.data.type
+					app.globalData.nickName = res.data.nickName
+					app.globalData.userName = res.data.userName
+					app.globalData.email = res.data.email
+					this.$emit("after")
+
 				}, () => {})
 			}
 		}

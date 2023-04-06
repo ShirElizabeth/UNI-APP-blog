@@ -13,8 +13,9 @@
 			<image :src="blog.user.avatar" mode="aspectFill" class="img-head"></image>
 			<!-- 点赞 -->
 			<view class="icon-container">
-	<text   @click.stop="changeGood(blog.id, true)" v-if="good_ids.indexOf(blog.id) < 0"  class="icon">&#xe871;</text>
-	<text   @click.stop="changeGood(blog.id,false )" v-else  class="icon">&#xe870;</text>
+				<text @click.stop="changeGood(blog.id, true)" v-if="good_ids.indexOf(blog.id) < 0"
+					class="icon">&#xe871;</text>
+				<text @click.stop="changeGood(blog.id,false )" v-else class="icon">&#xe870;</text>
 				<text class="icon-text">{{blog.good}}</text>
 				<!-- 点赞 -->
 				<image src="../../static/icons//ic_comment.png" mode="" class="icon"></image>
@@ -25,7 +26,9 @@
 				<text class="icon-text">{{blog.readCount}} </text>
 
 			</view>
-			<!-- @click.stop="clickShowUser(blog.user)" -->
+
+
+			<!-- 评论 -->
 			<view v-if="hasComment" class="blog-container">
 				<view v-for="(item,index) in parents" :key="item.id">
 					<view class="parent-container">
@@ -57,23 +60,15 @@
 			<view class="SYPL">
 				<text class="SYPLtext">已显示所有评论</text>
 			</view>
-			<!-- <image src="../../static/icons/汉堡包.jpg" mode="aspectFill"></image> -->
-			<!-- <view class="huifu">
-			<!-- 	auto-height 是否自动增高，设置auto-height时，style.height不生效 -->
-			<!-- maxlength="300" 最大字数三百 -->
 
-			<!-- <textarea class="huifupinglun" auto-height maxlength="300"  v-model="replyContent"
-				 placeholder="请输入回复内容" name="" id="" cols="30" rows="10"  inputmode="text"  type="text"  >
-				 
-				 </textarea> -->
-			<!-- <button class="PLfasong">发送</button> -->
-			<!-- </view> -->
+
 
 			<view class="input-container">
-				<image @click.stop="clickLogin" src="../../static/icons/default_user.png" mode="aspectFill" class="input-avatar"></image>
-				<textarea auto-height v-model="inputValue" :placeholder="inputHolder" class="input-area"
-					placeholder-class="input-holder" />
-				<image src="../../static/icons/commit.png" class="input-commit"></image>
+				<image @click.stop="clickLogin" :src="userAvatar" mode="aspectFill" class="input-avatar"></image>
+				<textarea @input="inputGetValue" auto-height v-model="inputValue" :placeholder="inputHolder"
+					class="input-area" placeholder-class="input-holder" />
+				<!-- 提交评论按钮 -->
+				<image @click="clickCommit" src="../../static/icons/commit.png" class="input-commit"></image>
 			</view>
 
 
@@ -83,10 +78,10 @@
 
 			</dialog-shell>
 
-    <login-dialog ref="login" >
-		
-		
-	</login-dialog>
+			<login-dialog @after="afterLogin" ref="login">
+
+
+			</login-dialog>
 		</view>
 
 	</view>
@@ -94,20 +89,23 @@
 <script>
 	let parentId = null
 	let cmtValue = ""
+	let app = getApp()
 	export default {
 
 		data() {
 			return {
 				blog: {},
 				hasGood: false,
-				good_ids:[],
+				good_ids: [],
 				loaded: false,
 				parents: [],
 				replies: [],
 				hasComment: false,
 				inputValue: "",
 				inputHolder: "请输入内容",
-				userDecs: ""
+				userDecs: "",
+				userAvatar: "../../static/icons/default_user.png"
+
 			}
 		},
 		onLoad(options) { //获取id
@@ -119,8 +117,72 @@
 			this.addReadCount(id)
 		},
 		methods: {
-			clickLogin(){
-			this.$refs.login.show()
+			clickCommit() {
+				// 1.判断是否登录
+				if (app.globalData.token.length == 0) {
+					console.log(cmtValue);
+					this.$refs.login.show()
+					return
+				}
+				// 2.判断数据非空合法性
+				if (cmtValue.length == 0) {
+					uni.showToast({
+						title: "请输入评论内容",
+						icon: 'none'
+					})
+				}
+				// 3.发请求
+				let url = this.$params.host + this.$params.action_add_comment
+				let data = {
+
+					nick_name: app.globalData.nickName,
+					avatar: "/" + app.globalData.avatar,
+					email: app.globalData.email,
+					content: cmtValue,
+					blog_id: this.blog.id,
+					parent_id: parentId,
+					token: app.globalData.token,
+					is_owner: app.globalData.uid == this.blog.user.id
+				}
+				this.$request.post(url, data, res => {
+					// 4.刷新评论列表
+					console.log(res);
+					if (!res.success) {
+						uni.showToast({
+							title: res.message,
+							icon: 'none'
+						});
+						return
+					}
+					let cmt = {}
+
+					cmt.avatar = res.data.avatar
+
+					cmt.blogId = res.data.blogId
+					cmt.content = res.data.content
+					cmt.createTime = res.data.createTime
+					cmt.email = res.data.email
+					cmt.id = res.data.id
+					cmt.nickName = res.data.nickName
+					cmt.owner = res.data.owner
+					cmt.parentId = res.data.parentId
+					let comments = this.blog.comments.concat(cmt)
+					this.blog.comments = comments
+					this.formatComments(comments)
+					this.hasComment = this.blog.comments.length > 0
+					this.inputHolder = "请输入评论内容......"
+					this.inputValue = ""
+					cmtValue = ""
+					parentId = null
+					// 刷新列表页的评论数
+				}, () => {})
+
+			},
+			afterLogin() {
+				this.userAvatar = this.$params.host + getApp().globalData.avatar
+			},
+			clickLogin() {
+				this.$refs.login.show()
 			},
 			clickShowUser(user) {
 				this.userDecs = "作者" + user.nickName + "\n联系方式" + user.email
@@ -131,42 +193,50 @@
 				let data = {
 					"id": id
 				}
-
 				this.$request.postParam(url, data, res => {
 					let count = res.data
-					//第一种方式，获取上一页面实例
-					// this.refreshPreviousPage(id,count)
-					//第二种方式，使用通知中心解耦
-					// this.$noti.post(this.$params.noti_refresh_count, {
-					// 	id,
-					// 	count
-					// })
-					// console.log(id);
-					// console.log(count);	
+					//第一张方式:获取上一页实例
+					// this.refreshPreviousPage(id, count)
+					//第二种方式：使用通知中心解耦
+					this.$noti.post(this.$params.noti_refresh_count, {
+						id: id,
+						count: count
+					})
+					console.log(id);
+					console.log(count);
 				}, () => {
-
-					this.getBlog(id)
+					this.getBlog(id);
 				})
 			},
-changeGood(id, hasGood) {
+			refreshPreviousPage(id, count) {
+				let pages = getCurrentPages()
+				let prev = pages[pages.length - 2]
+				prev.refreshReadCount(id, count)
+			},
+			refreshGoodPage(id, good) {
+				let pages = getCurrentPages();
+				let prev = pages[pages.length - 2]
+				prev.refreshGoodCount(id, good);
+			},
+			changeGood(id, hasGood) {
 				//同步到服务器,并且去最新数据
 				let url = this.$params.host
 				let action = hasGood ? this.$params.action_good : this.$params.action_del_good
 				url += action
 				let data = {
-					"id" : id
+					"id": id
 				}
-				this.$request.postParam(url,data,res => {
+				this.$request.postParam(url, data, res => {
 					this.blog.good = res.data
 					if (hasGood) {
-					    this.good_ids.push(id);
+						this.good_ids.push(id);
 						// this.good_ids = this.good_ids.concat(id)
-					  } else {
-					    let index = this.good_ids.indexOf(id);
-						this.$util.remove(this.good_ids,index)
-					  }
+					} else {
+						let index = this.good_ids.indexOf(id);
+						this.$util.remove(this.good_ids, index)
+					}
 					uni.setStorageSync(this.$params.key_good_ids, this.good_ids);
-				},() => {})
+				}, () => {})
 			},
 			getBlog(id) {
 				let url = this.$params.host + this.$params.action_blog + id
@@ -192,7 +262,7 @@ changeGood(id, hasGood) {
 					return
 				}
 				let rootComments = []
-				comments.forEach(c => { //找根评论
+				comments.forEach(c => {
 					if (!c.avatar.startsWith("http")) {
 						c.avatar = this.$params.host + c.avatar.substring(1)
 					}
@@ -201,10 +271,11 @@ changeGood(id, hasGood) {
 						rootComments.push(c)
 					}
 				})
-				// 排序评论，倒序
+
 				rootComments.sort((c1, c2) => {
 					return new Date(c2.createTime).getTime() - new Date(c1.createTime).getTime()
 				})
+
 				let replies = new Array(rootComments.length).fill([])
 				let index = 0
 				rootComments.forEach(r => {
@@ -219,7 +290,7 @@ changeGood(id, hasGood) {
 				console.log(replies);
 			},
 			getChildren(parent, comments) {
-				// 得到parent所有的子评论
+				// todo: 得到parent所有的子评论
 				let childrenComments = [];
 				comments.forEach(comment => {
 					if (parent.id == comment.parentId) {
@@ -231,17 +302,17 @@ changeGood(id, hasGood) {
 				})
 				return childrenComments;
 			},
-			canDelete(item, reply) {
-				return true;
+			canDelete(item) {
+				return false
 			},
 			clickToReply(item) {
 				parentId = item.id
 				this.inputHolder = "@" + item.nickName
 			},
-			inputGetVakue(e) {
-				cmtValue = e.detail.cmtValue
+			inputGetValue(e) {
+				cmtValue = e.detail.value
 				console.log(cmtValue);
-			}
+			},
 		}
 	}
 </script>

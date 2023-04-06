@@ -38,14 +38,15 @@ function remove(name,observer){
  * @param {Object} info 发送的参数
  */
 function post(name,info){
-	for(let i = 0; i < notices.length; i++) {
+	console.log(name);
+	console.log(info);
+	for(let i =0;i< notices.length;i++){
 		let noti = notices[i]
 		if(noti.name == name){
 			noti.selector(info)
 		}
 	}
 }
-
 module.exports = {
 	add,
 	remove,

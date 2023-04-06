@@ -9,7 +9,19 @@
 		},
 		onHide: function() {
 			console.log('App Hide')
+		},
+		// 4.4
+		globalData:{
+			uid:"",
+			token:"",
+			avatar:"/static/icons/default_user.png",
+			type:-1,
+			// type:-1 类似这种数据是1或者2的时候,设置一个为负数的初始值
+			nickName:"",
+			userName:"",
+			email:""
 		}
+		
 	}
 </script>
 

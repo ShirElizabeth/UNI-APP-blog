@@ -2,6 +2,7 @@ import App from './App'
 import request from "utils/request.js"
 import params from "utils/params.js"
 import util from './utils/util.js'
+import notification from "utils/notification.js"
 // #ifndef VUE3
 import Vue from 'vue'
 Vue.config.productionTip = false
@@ -10,6 +11,7 @@ App.mpType = 'app'
 Vue.prototype.$request =request
 Vue.prototype.$params =params
 Vue.prototype.$util = util
+Vue.prototype.$notification = notification
 try {
   function isPromise(obj) {
     return (
