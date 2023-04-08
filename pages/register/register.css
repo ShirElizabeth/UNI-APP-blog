@@ -1,0 +1,61 @@
+.sign-up-header{
+	
+}
+.welcome {
+	font-size: 40rpx;
+	font-weight: bolder;
+	margin-bottom: 20rpx;
+	margin-left: 40rpx;
+}
+.welcome2 {
+	font-size: 25rpx;
+	margin-bottom: 20rpx;
+	margin-left: 50rpx;
+}
+.sign-up-img{
+	width: 250rpx;
+	height: 250rpx;
+	border-radius: 50%;
+	margin: 20rpx;
+}
+.sign-up-container{
+	margin-left: 20rpx;
+	margin-right: 20rpx;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	padding: 10rpx 20rpx;
+	background-color: white;
+
+	border-bottom: #a8d8b9 2px solid;
+}
+.sign-up-container>input {
+	margin-left: 20rpx;
+	margin-right: 20rpx;
+	padding: 5rpx;
+	flex-grow: 1;
+}
+.user-img{
+	float: left;
+	width: 100rpx;
+	height: 100rpx;
+	border-radius: 50%;
+	margin-left: 75rpx;
+}
+.user-img-SC{
+	color: #d6d6d6;
+	line-height: 100rpx;
+}
+.user{
+	margin-top: 30RPX;
+	border-bottom: 4px solid #a8d8b9;
+}
+.sign-up{
+	background-color:#a8d8b9;
+	margin-top: 50rpx;
+	
+}
+.secret-info{
+	color: #a8d8b9;
+	text-align: center;
+}

@@ -12,5 +12,6 @@ export default {
 	key_good_ids: "good_ids",
 	noti_refresh_count: "noti_refresh_count",
 	action_login:"api/v1/login",
-	action_add_comment:"/api/v1/blogs/comment"
+	action_add_comment:"/api/v1/blogs/comment",
+	action_del_comment:"/api/v1/blogs/comments/delete/"
 }

@@ -3,7 +3,7 @@
 		<dialog-shell ref="shell" title="用户登录" confirm-text="登录" @confirm="confirmLogin()">
 			<image src="../../static/icons/icon.png" class="login-img" mode=""></image>
 			<text class="welcome">欢迎登录</text>
-			<text class="info-register">没有账号？请注册</text>
+			<text class="info-register" @click="clickGoRegister">没有账号？请注册</text>
 
 
 			<view class="login-container">
@@ -49,6 +49,16 @@
 			}
 		},
 		methods: {
+			clickGoRegister(){
+				uni.navigateTo({
+					url: '../../pages/register/register',
+					success: res => {
+						this.$refs.shell.clickToHide()
+					},
+					fail: () => {},
+					complete: () => {}
+				});
+			},
 			show() {
 				this.$refs.shell.show()
 			},

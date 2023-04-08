@@ -114,10 +114,30 @@ function postParam(url, data, funSuccess, funComplete) {
 		});
 	}
 	
+	
+	function deleteParams(url, data, funSuccess, funComplete) {
+		uni.request({
+		  url: url,
+		  header: {
+		   "Accept": "application/json;q=0.9,*/*;q=0.1",
+		   "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+		  },
+		  method: 'DELETE',
+		  sslVerify: false,
+		  data: data,
+		  success: res => funSuccess(res.data),
+		  fail: err => {
+		  },
+		  complete: () => {
+		   funComplete()
+		  }
+		});
+	}
 
 module.exports = { //开放导出
 	get,
 	getWithHeader,
 	postParam,
-	post
+	post,
+	deleteParams
 }

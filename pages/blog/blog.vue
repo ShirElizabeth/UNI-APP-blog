@@ -35,7 +35,7 @@
 						<text class="cmt-author">{{item.nickName}}</text>
 						<view class="cmt-time-container">
 							<text class="cmt-time">{{item.createTime}}</text>
-							<text v-if="canDelete(item)" class="txt-delete">[删除]</text>
+							<text v-if="canDelete(item)"@click="deleteCmt(item,true,index)" class="txt-delete">[删除]</text>
 						</view>
 						<image @click.stop="clickShowUser(item)" :src="item.avatar" mode="aspectFill"
 							class="cmt-avatar"></image>
@@ -47,7 +47,7 @@
 								<text class="reply-author">{{reply.nickName}}</text>
 								<text class="reply-to">@{{reply.toUser}}</text>
 								<text class="cmt-time">{{reply.createTime}}</text>
-								<text v-if="canDelete(reply)" class="txt-delete">[删除]</text>
+								<text v-if="canDelete(reply)" @click="deleteCmt(reply,false,index)" class="txt-delete">[删除]</text>
 							</view>
 							<text @click="clickToReply(reply)" class="reply-content">{{reply.content}}</text>
 						</view>
@@ -117,6 +117,7 @@
 			this.addReadCount(id)
 		},
 		methods: {
+			
 			clickCommit() {
 				// 1.判断是否登录
 				if (app.globalData.token.length == 0) {
@@ -198,12 +199,12 @@
 					//第一张方式:获取上一页实例
 					// this.refreshPreviousPage(id, count)
 					//第二种方式：使用通知中心解耦
-					this.$noti.post(this.$params.noti_refresh_count, {
-						id: id,
-						count: count
-					})
-					console.log(id);
-					console.log(count);
+					// this.$noti.post(this.$params.noti_refresh_count, {
+					// 	id: id,
+					// 	count: count
+					// })
+					// console.log(id);
+					// console.log(count);
 				}, () => {
 					this.getBlog(id);
 				})
@@ -257,6 +258,7 @@
 					this.formatComments(this.blog.comments)
 				}, () => {})
 			},
+			//评论
 			formatComments(comments) {
 				if (comments.length == 0) {
 					return
@@ -286,8 +288,8 @@
 				})
 				this.parents = rootComments
 				this.replies = replies
-				console.log(rootComments);
-				console.log(replies);
+				// console.log(rootComments);
+				// console.log(replies);
 			},
 			getChildren(parent, comments) {
 				// todo: 得到parent所有的子评论
@@ -303,7 +305,50 @@
 				return childrenComments;
 			},
 			canDelete(item) {
-				return false
+				return app.globalData.type ==1 || item.avatar == this.userAvatar
+			},
+			deleteCmt(cmt,isParent,index){
+				let url = this.$params.host + this.$params.action_del_comment + cmt.id
+				let data={
+					token:app.globalData.token
+				}
+				uni.showModal({
+					title: '删除评论',
+					content: '确认删除该评论？ \n 注意，子评论也会同时删除！',
+					showCancel: true,
+					cancelText: '取消',
+					confirmText: '删除',
+					success: res => {
+						if(res.confirm){
+							uni.showLoading({
+								title:"删除评论...",
+								mask:false
+							});
+							this.$request.deleteParams(url,data,res => {
+								uni.showToast({
+									title:res.message,
+									icon:"none"
+								});
+								if(res.success){
+									let list = this.replies[index]
+									list.push(this.parents[index])
+									this.$util.remove(this.parents,index)
+									this.$util.remove(this.replies,index)
+									this.blog.comments = this.blog.comments.filter(c=> list.every(r=>r.id!=c.id))
+								}else{
+									let children = this.getChildren(cmt,this.replies[index])
+									children.push(cmt)
+									this.replies[index]=this.replies[index].filter(r=>children.every(c => c.id != r.id))
+									this.blog.comments = this.blog.comments.filter(c=> children.every(r => r.id != c.id))
+								}
+							},()=>{
+								uni.hideLoading()
+							})
+						}
+					},
+					fail: () => {},
+					complete: () => {}
+				});
 			},
 			clickToReply(item) {
 				parentId = item.id

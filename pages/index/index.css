@@ -18,7 +18,7 @@
 		font-weight: bold;
 		padding-top: 10rpx;
 		padding-bottom: 5rpx;
-		border-bottom: darkgray 3px solid;
+		border-bottom: #a8d8b9 3px solid;
 		white-space: nowrap;
 		text-overflow:ellipsis;
 	    overflow: hidden;
@@ -43,7 +43,7 @@
 	} */
 	.item-tag{
 		font-size: 12px;
-		color: #55aa00;
+		color: #a8d8b9;
 		border:  2px solid;
 		border-radius: 20px;
 		float: left;
@@ -63,7 +63,7 @@
 	.icon-container{
 		display: flex;
 		flex-direction: row;
-		border-top: darkblue 1px solid;
+		border-top: #a8d8b9 1px solid;
 		padding: 5rpx;
 		padding-left: 15rpx;
 	}
@@ -93,7 +93,7 @@
 			width: 50rpx;
 			height: 50rpx;
 			position:absolute;//绝对定位
-		    color: pink;
+		    color: #a8d8b9;
 			right: 20px;//向右
 			margin-top: 6px;
 	}

@@ -63,7 +63,7 @@
 	
 	.title {
 		font-size: 36rpx;
-		color: #8f8f94;
+		color:  #a8d8b9;
 	}
 	.img{
 		display: block;
