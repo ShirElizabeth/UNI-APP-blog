@@ -13,9 +13,9 @@
 			<image :src="blog.user.avatar" mode="aspectFill" class="img-head"></image>
 			<!-- 点赞 -->
 			<view class="icon-container">
-				<text @click.stop="changeGood(blog.id, true)" v-if="good_ids.indexOf(blog.id) < 0"
-					class="icon">&#xe871;</text>
-				<text @click.stop="changeGood(blog.id,false )" v-else class="icon">&#xe870;</text>
+				<image src="../../static/icons/ic_good.png" @click.stop="changeGood(blog.id, true)" v-if="good_ids.indexOf(blog.id) < 0"
+					class="icon"></text>
+				<image src="../../static/icons/ic_good.png" @click.stop="changeGood(blog.id,false )" v-else class="icon"></image>
 				<text class="icon-text">{{blog.good}}</text>
 				<!-- 点赞 -->
 				<image src="../../static/icons//ic_comment.png" mode="" class="icon"></image>

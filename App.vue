@@ -27,7 +27,8 @@
 
 <style>
 	 @import url("/iconfont/iconfont.css");
-	
+	 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous" referrerpolicy="no-referrer" />);
+	/* Font Awesome一套绝佳的图标字体库和CSS框架 */
 
 	/*每个页面公共css */
 	/* @import url("/common/iconfont.css"); */

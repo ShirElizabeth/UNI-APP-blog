@@ -5,7 +5,7 @@
 }
 	.item-tag{
 		font-size: 12px;
-		color: #55aa00;
+		color: #a8d8b9;
 		border:  2px solid;
 		border-radius: 20px;
 		float: left;
@@ -35,7 +35,7 @@
 .blog-title{
  font-size: 30rpx;
  font-weight: bold;
- color: #cc3300;
+ color: #a8d8b9;
  margin-left: 100rpx;
  margin-right: 50rpx;
  margin-top: 10rpx;
@@ -130,7 +130,7 @@
 	position: fixed;
 	background-color: white;
 	border-radius: 10rpx;
-	border: red 1px solid;
+	border: #a8d8b9 1px solid;
 	bottom: 20rpx;
 	padding-top: 20rpx;
 	padding-bottom: 20rpx;
@@ -152,10 +152,7 @@
 	border-radius: 5px;
 	border: 1px solid #ccc;
 	margin-left: 10rpx;
-	/* margin-left: 10rpx;
-	margin-right: 15rpx;
-	padding: 5rpx;
-	height: 60rpx; */
+	
 }
 
 .input-holder {
@@ -164,10 +161,11 @@
 }
 
 .input-commit {
-	width: 50rpx;
-	height: 50rpx;
+	width: 70rpx;
+	height: 70rpx;
 	margin-left: 10rpx;
-	cursor: pointer;
+	/* cursor: pointer; */
+	
 }
 .SYPL{
 	width: 100%;

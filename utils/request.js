@@ -67,77 +67,96 @@ function postParam(url, data, funSuccess, funComplete) {
 		mask: false
 	});
 	uni.request({
-	  url: url,
-	  header: {
-	   "Accept": "application/json;q=0.9,*/*;q=0.1",
-	   "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
-	  },
-	  method: 'POST',
-	  sslVerify: false,
-	  data: data,
-	  success: res => funSuccess(res.data),
-	  fail: err => {
-	   console.log(err);
-	  },
-	  complete: () => {
-	   uni.hideLoading()
-	   funComplete()
-	  }
+		url: url,
+		header: {
+			"Accept": "application/json;q=0.9,*/*;q=0.1",
+			"Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+		},
+		method: 'POST',
+		sslVerify: false,
+		data: data,
+		success: res => funSuccess(res.data),
+		fail: err => {
+			console.log(err);
+		},
+		complete: () => {
+			uni.hideLoading()
+			funComplete()
+		}
 	});
 }
-	/**
-	 * 
-	 * POST请求
-	 * @param {String} url 要请求的接口地址
-	 * @param {JSON} data要提交的数据
-	 * @param {function} funSuccess 成功的回调
-	 * @param {function} funComplete 请求结束的回调，如果无需处理则传递一个空方法即可
-	 */
-	function post(url, data, funSuccess, funComplete) {
-		uni.showLoading({
-			title: "提交数据...",
-			mask: false
-		});
-		console.log(data);
-		uni.request({
-			url: url,
-			method: 'POST',
-			data: data,
-			success: res => funSuccess(res.data),
-			fail: err => {
-				console.log(err);
-			},
-			complete: () => {
-				uni.hideLoading()
-				funComplete()
-			}
-		});
-	}
-	
-	
-	function deleteParams(url, data, funSuccess, funComplete) {
-		uni.request({
-		  url: url,
-		  header: {
-		   "Accept": "application/json;q=0.9,*/*;q=0.1",
-		   "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
-		  },
-		  method: 'DELETE',
-		  sslVerify: false,
-		  data: data,
-		  success: res => funSuccess(res.data),
-		  fail: err => {
-		  },
-		  complete: () => {
-		   funComplete()
-		  }
-		});
-	}
+/**
+ * 
+ * POST请求
+ * @param {String} url 要请求的接口地址
+ * @param {JSON} data要提交的数据
+ * @param {function} funSuccess 成功的回调
+ * @param {function} funComplete 请求结束的回调，如果无需处理则传递一个空方法即可
+ */
+function post(url, data, funSuccess, funComplete) {
+	uni.showLoading({
+		title: "提交数据...",
+		mask: false
+	});
+	console.log(data);
+	uni.request({
+		url: url,
+		method: 'POST',
+		data: data,
+		success: res => funSuccess(res.data),
+		fail: err => {
+			console.log(err);
+		},
+		complete: () => {
+			uni.hideLoading()
+			funComplete()
+		}
+	});
+}
+
+
+function deleteParams(url, data, funSuccess, funComplete) {
+	uni.request({
+		url: url,
+		header: {
+			"Accept": "application/json;q=0.9,*/*;q=0.1",
+			"Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+		},
+		method: 'DELETE',
+		sslVerify: false,
+		data: data,
+		success: res => funSuccess(res.data),
+		fail: err => {},
+		complete: () => {
+			funComplete()
+		}
+	});
+}
+
+
+
+/**
+ * @param {String} url 要请求的接口地址
+ * @param {String} name 文件上传接口参数名，一般为file
+ * @param {String} filepath 本地文件
+ * @param {JSON} data 其他表单参加入user、password等
+ * @param {function} funSuccess 成功的回调
+ */
+function postFile(url, name, filePath, data, funSuccess) {
+	uni.uploadFile({
+		url,
+		name,
+		filePath,
+		formData: data,
+		success: res => funSuccess(res)
+	});
+}
 
 module.exports = { //开放导出
 	get,
 	getWithHeader,
 	postParam,
 	post,
-	deleteParams
+	deleteParams,
+	postFile
 }
