@@ -1,0 +1,99 @@
+page {
+	background-color: #EDEDED;
+}
+
+.head-container {
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	height: 120rpx;
+	background-color: white;
+	margin-bottom: 20rpx;
+}
+
+.img-avatar {
+	width: 100rpx;
+	height: 100rpx;
+	margin: 10rpx;
+	border-radius: 50%;
+}
+
+.user-info-container {
+	flex-grow: 1;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+.nick-type-container {
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	height: 70rpx;
+	border-bottom: darkgray 1px solid;
+}
+
+.nick-badge {
+	height: 70rpx;
+	padding-left: 15rpx;
+	padding-right: 10rpx;
+	font-size: 24rpx;
+	font-weight: bold;
+	line-height: 70rpx;
+}
+
+.img-badge {
+	width: 40rpx;
+	height: 40rpx;
+	margin: 15rpx 15rpx 15rpx 5rpx;
+}
+
+.user-email {
+	width: 100%;
+	height: 50rpx;
+	padding-left: 15rpx;
+	font-size: 22rpx;
+	color: #18BC37;
+	line-height: 50rpx;
+	padding-bottom: 10rpx;
+}
+
+.icon-zhuxiao {
+	font-size: 40rpx;
+	font-weight: bold;
+	color: #18BC37;
+	position: absolute;
+	right: 20rpx;
+	top: 10rpx;
+}
+
+.data-container {
+	width: 100%;
+	margin: 15rpx 0;
+}
+
+.data-title-container {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	height: 100rpx;
+	background-color: white;
+	align-items: center;
+}
+
+.title-name {
+	flex-grow: 1;
+	margin-left: 30rpx;
+	font-size: 28rpx;
+}
+
+.ic-arrow {
+	margin-right: 30rpx;
+}
+
+.category-container {
+	width: 100%;
+	height: 300rpx;
+	background-color: white;
+	border-top: darkgray 1px solid;
+}

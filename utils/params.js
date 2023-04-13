@@ -15,4 +15,6 @@ export default {
 	action_add_comment:"api/v1/blogs/comment",
 	action_del_comment:"api/v1/blogs/comments/delete/",
 	action_upload:"/api/v1/blogs/upload",
+	action_register:"/api/v1/register",
+	noti_login_status:"noti_login_status"
 }

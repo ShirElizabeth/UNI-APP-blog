@@ -8,8 +8,8 @@ const formatTime = date => {
 	return year + "-" + month + "-" + day + "-" + hour + ":" + minute + ":" + second
 }
 
-function remove(arr,index){//删除数组自定义函数
-	arr[index] = arr[arr.length - 1];	
+function remove(arr, index) { //删除数组自定义函数
+	arr[index] = arr[arr.length - 1];
 	arr.pop();
 }
 
@@ -24,27 +24,23 @@ function remove(arr,index){//删除数组自定义函数
  * @param {Object} len  变量最小长度
  * @param {Object} name 该字段的中文名称
  */
-function checkLength(field, minLen, maxLen, name){
-  if(field.length >= minLen && field.length <= maxLen){
-    return true;
-  }
-  let message;
-  if(field.length < minLen){
-    message = name + "不能少于" + minLen + "个字符";
-  } else if(field.length > maxLen){
-    message = name + "不能超过" + maxLen + "个字符";
-  } else {
-    message = name + "不能为空";
-  }
-  uni.showToast({
-    title:message,
-    icon:"none"
-  });
-  return false;
+//数据校验(数据，长度，名字)
+function checkLength(field, len, name) {
+	if (field.length >= len) {
+		return true
+	}
+	let message = name + "不能少于" + len + "个字符串"
+	if (field.length == 0) {
+		message = name + "不能为空"
+	}
+	uni.showToast({
+		title: message,
+		icon: 'none'
+	})
 }
-
-module.exports ={
+module.exports = {
 	remove,
+	checkLength,
 	formatTime,
-	checkLength
+
 }
