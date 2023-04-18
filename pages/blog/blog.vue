@@ -115,6 +115,8 @@
 				this.hasGood = good_ids.indexOf(id) >= 0
 			}
 			this.addReadCount(id)
+		this.$noti.add(this.$params.$noti_login_status,this.afterLogin,this)
+		
 		},
 		methods: {
 			
@@ -265,7 +267,7 @@
 				}
 				let rootComments = []
 				comments.forEach(c => {
-					if (!c.avatar.startsWith("http")) {
+					if (!c.avatar.startsWith("/http")) {
 						c.avatar = this.$params.host + c.avatar.substring(1)
 					}
 					c.createTime = this.$util.formatTime(new Date(c.createTime))

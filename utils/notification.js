@@ -48,7 +48,7 @@ function post(name,info){
 	}
 }
 module.exports = {
-	add,
 	remove,
-	post
+	post,
+	add,
 }
