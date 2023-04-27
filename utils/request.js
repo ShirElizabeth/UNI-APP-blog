@@ -98,7 +98,6 @@ function post(url, data, funSuccess, funComplete) {
 		title: "提交数据...",
 		mask: false
 	});
-	console.log(data);
 	uni.request({
 		url: url,
 		method: 'POST',
@@ -152,11 +151,44 @@ function postFile(url, name, filePath, data, funSuccess) {
 	});
 }
 
+/**
+ * 异步请求函数，使用 Promise 封装 uni.request 方法
+ * @param {string} url - 请求的地址
+ * @param {Object} data - 请求的数据，默认为空对象
+ * @param {string} method - 请求方法，默认为 GET
+ * @returns {Promise} 返回一个 Promise 实例，该实例在异步操作成功时调用 resolve()，在失败时调用 reject()
+ */
+function requestAsync(url, data = {}, method = 'GET') {
+	// 返回一个 Promise 实例，该实例在异步操作成功时调用 resolve()，在失败时调用 reject()
+	return new Promise((resolve, reject) => {
+		// 调用 uni.request() 方法发起网络请求
+		uni.request({
+			url, // 请求的地址
+			method, // 请求方法，默认为 GET
+			data, // 请求数据，默认为空对象
+			sslVerify: false,
+			success: res => {
+				// 请求成功时的回调函数，调用 resolve() 并将返回值传递给 then() 方法的回调函数
+				resolve(res)
+			},
+			fail: err => {
+				// 请求失败时的回调函数，调用 reject() 并将错误信息传递给 catch() 方法的回调函数
+				reject(err)
+			},
+			complete: () => {
+				// 请求完成时的回调函数，不管请求成功或失败都会执行
+				// 此处不需要进行任何处理，可以省略
+			}
+		})
+	})
+}
+
 module.exports = { //开放导出
 	get,
 	getWithHeader,
 	postParam,
 	post,
 	deleteParams,
-	postFile
+	postFile,
+	requestAsync
 }

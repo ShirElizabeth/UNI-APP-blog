@@ -49,7 +49,7 @@
 			}
 		},
 		methods: {
-			clickGoRegister(){
+			clickGoRegister() {
 				uni.navigateTo({
 					url: '../../pages/register/register',
 					success: res => {
@@ -71,7 +71,7 @@
 			inputGetUser(e) {
 				this.userValue = e.detail.value
 			},
-			
+
 			confirmLogin() {
 				if (this.userValue.length == 0 || this.pwdValue.length == 0) {
 					uni.showToast({
@@ -103,14 +103,14 @@
 					app.globalData.uid = res.data.id
 					app.globalData.token = res.data.token
 					app.globalData.avatar = res.data.avatar
-					console.log(res.data.avatar);
+
 					app.globalData.type = res.data.type
 					app.globalData.nickName = res.data.nickName
 					app.globalData.userName = res.data.userName
 					app.globalData.email = res.data.email
 					this.$emit("after")
 					// this.$noti.post
- 
+
 				}, () => {})
 			}
 		}

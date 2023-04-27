@@ -70,6 +70,7 @@ page {
 .data-container {
 	width: 100%;
 	margin: 15rpx 0;
+	background-color: white;
 }
 
 .data-title-container {
@@ -124,3 +125,67 @@ scroll-view ::-webkit-scrollbar {
 	height: 0;
 	background-color: transparent;
 }	
+.scroll-item>image{
+	width: 580rpx;
+height: 300rpx;
+border-radius: 15rpx;
+}
+.scroll-item>text{
+	font-size: 26rpx;
+	width: 580rpx;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	float: left;
+	margin-top: 10rpx;
+}
+.data-item-name{
+	padding: 10rpx;
+	border: #a8d8b9 1px solid;
+	font-size: 24rpx;
+	color: #a8d8b9;
+	border-top-left-radius: 30rpx;
+	border-bottom-left-radius: 30rpx;
+	margin-top: 10rpx;
+	margin-bottom: 10rpx;
+}
+.data-item{
+	padding: 10rpx;
+	margin: 5rpx;
+	float: left;
+   display: flex;
+   flex-direction: row;
+}
+.data-item-count{
+	padding: 10rpx;
+	border-top: #a8d8b9 1px solid;
+	border-right: #a8d8b9 1px solid;
+	border-bottom: #a8d8b9 1px solid;
+	border: #a8d8b9 1px solid;
+	font-size: 24rpx;
+	color: #a8d8b9;
+	border-top-right-radius: 30rpx;
+	border-bottom-right-radius: 30rpx;
+	margin-top: 10rpx;
+	margin-bottom: 10rpx;
+}
+.data-item-btn {
+ padding: 10rpx;
+ font-size: 24rpx;
+ font-weight: bold;
+ color: white;
+ background-color: #cc3300;
+ border-top-right-radius: 30rpx;
+ border-bottom-right-radius: 30rpx;
+ margin-top: 10rpx;
+ margin-bottom: 10rpx;
+}
+	.ic-add {
+	 color: #cc3300;
+	 font-size: 40rpx;
+	 font-weight: bold;
+	 line-height: 100%;
+	 text-align: center;
+	 margin-top: 18rpx;
+	 margin-left: 20rpx;
+	}

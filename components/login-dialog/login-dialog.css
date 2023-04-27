@@ -14,7 +14,7 @@
 
 .info-register {
 	font-size: 24rpx;
-	color: blueviolet;
+	color: #a8d8b9;
 	margin-left: 20rpx;
 	margin-bottom: 20rpx;
 }
@@ -50,7 +50,7 @@
 }
 
 .ic-paw-status {
-	color: red;
+	color: #a8d8b9;
 	font-size: 50rpx;
 	list-style: 100%;
 	text-align: center;
