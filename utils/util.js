@@ -38,9 +38,18 @@ function checkLength(field, len, name) {
 		icon: 'none'
 	})
 }
+
+	
+function ellipsis(str, len) {
+	if (str && str.length > len) {
+		return str.substr(0, len - 3) + "..."
+	}
+	return str
+}
 module.exports = {
 	remove,
 	checkLength,
 	formatTime,
+	ellipsis
 
 }

@@ -23,4 +23,6 @@ export default {
 	action_categories_add: "/api/v1/categories/add",
 	action_categories_put:"/api/v1/categories/put/",
 	action_category_del:"api/v1/categories/delete/",
+	action_tags:"/api/v1/tags/",
+	action_tag_count:"/api/v1/tags/count/"
 }
