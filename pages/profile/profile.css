@@ -108,6 +108,14 @@ page {
 		background-color: white;
 		border-top: darkgray 1rpx solid;
 }
+.scrollNew{
+	white-space: nowrap;
+		height: 800rpx;
+		width: 100%;
+		padding: 20rpx;
+		background-color: white;
+		border-top: darkgray 1rpx solid;
+}
 .scroll-item{
 	display: inline-block;
 	width: 580rpx;

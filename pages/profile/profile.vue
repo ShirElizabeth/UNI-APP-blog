@@ -26,10 +26,36 @@
 				<scroll-view v-if="status[0].visible" scroll-x class="scroll" scroll-with-animation="true"
 					@scrolltolower="getMyBlog">
 
-					<view @click="onClickGoTo(blog.id)" v-for="(blog,index) in myBlog" :key="'m_' + blog.id" class="scroll-item">
+					<view @click="onClickGoTo(blog.id)" v-for="(blog,index) in myBlog" :key="'m_' + blog.id"
+						class="scroll-item">
 						<image :src="blog.picture" mode="aspectFill"></image>
 						<text>{{blog.title}}</text>
 					</view>
+
+				</scroll-view>
+
+
+			</view>
+
+
+
+
+			<view class="data-container">
+				<view @click="clickSwitch(2)" class="data-title-container">
+					<text class="data-title-name">我赞过的{{myGoodCount}}文章</text>
+					<text
+						:class="status[2].visible ? 'iconfont icon-under ic-arrow' : 'iconfont icon-up ic-arrow'"></text>
+				</view>
+
+				<scroll-view v-if="status[2].visible" scroll-x class="scroll" scroll-with-animation="true">
+
+
+					<view v-for="(blog,index)  in myGoodBlogs" @click="onClickGoTo(blog.id)" :key="'g_'+blog.id"
+						class="scroll-item">
+						<image :src="blog.picture" mode="aspectFill"></image>
+						<text>{{blog.title}}</text>
+					</view>
+
 
 				</scroll-view>
 
@@ -68,52 +94,49 @@
 
 				</view>
 
+				<view class="data-container">
+					<view @click="clickSwitch(3)" class="data-title-container">
+						<text class="data-title-name">我管理{{myTag.length}}个标签数据</text>
+						<text
+							:class="status[3].visible ? 'iconfont icon-under ic-arrow' : 'iconfont icon-up ic-arrow'"></text>
+					</view>
+
+					<view v-if="status[3].visible" class="scrollNew">
+						<view class="data-item" v-for="(tag,index) in  myTag">
+							<text @click="clickUpdataCategory(tag.id,tag.title)"
+								class="data-item-name">{{tag.title}}</text>
+
+							<text @click="tag.count==0?clickDelete(tag.id,tag.title):''"
+								:class="tag.count === 0 ? 'data-item-btn' : 'data-item-count'">{{ tag.count === 0 ? 'x' : tag.count }}</text>
+						</view>
+
+						<view class="data-item">
+							<text class="iconfont icon-tianjia ic-add" @click="clickAdd"></text>
+						</view>
 
 
-			</view>
-
-
-
-			<view class="data-container">
-				<view @click="clickSwitch(2)" class="data-title-container">
-					<text class="data-title-name">赞过的{{myGoodCount}}文章</text>
-					<text
-						:class="status[2].visible ? 'iconfont icon-under ic-arrow' : 'iconfont icon-up ic-arrow'"></text>
-				</view>
-
-				<scroll-view v-if="status[2].visible" scroll-x class="scroll" scroll-with-animation="true">
-
-
-					<view  v-for="(blog,index)  in myGoodBlogs" @click="onClickGoTo(blog.id)" :key="'g_'+blog.id"
-						class="scroll-item">
-						<image :src="blog.picture" mode="aspectFill"></image>
-						<text>{{blog.title}}</text>
+						<dialog-shell ref="add_shell" title="添加类别" @confirm="confirmAdd">
+							<view style="margin: 10rpx;">
+								<input type="text" placeholder="请输入名称" focus style="padding-left: 15rpx;"
+									@input="inputGetValue">
+							</view>
+						</dialog-shell>
+						<dialog-shell ref="update_shell" title="修改类别" @confirm="confirmUpdate">
+							<view style="margin: 10rpx;">
+								<input type="text" placeholder="请输入新的名称" focus style="padding-left: 15rpx;"
+									@input="inputGetValue">
+							</view>
+						</dialog-shell>
 					</view>
 
 
-				</scroll-view>
+				</view>
 
 
-			</view>
 
-
-	<view class="data-container">
-	  <view @click="clickSwitch(3)" class="data-title-container">
-	    <text class="data-title-name">管理19个标签数据</text>
-	    <text :class="status[3].visible ? 'iconfont icon-under ic-arrow' : 'iconfont icon-up ic-arrow'"></text>
-	  </view>
-	
-	  <scroll-view v-if="status[3].visible" scroll-x class="scroll" scroll-with-animation="true">
-	    <view class="data-item" v-for="(tag,index) in tags" :key="'tag-' + tag.id">
-	      <text class="data-item-name">{{tag.name}}</text>
-	      <view class="data-item-count">{{tag.count}}</view>
-	    </view>
-	  </scroll-view>
 
 
 			</view>
-
-
 
 
 		</view>
@@ -155,14 +178,14 @@
 					{
 						visible: false
 					},
-					
+
 				],
 				myBlog: [],
 				myCount: -1,
 				myGoodBlogs: [],
 				myGoodCount: -1,
 				categories: [],
-				 tags: [], // 初始化为空数组
+				myTag: [], // 初始化为空数组
 			}
 		},
 		onShow() {
@@ -185,13 +208,13 @@
 		},
 		methods: {
 			onClickGoTo(index) {
-							uni.navigateTo({
-								url: '../blog/blog?id=' + index,
-								success: res => {},
-								fail: () => {},
-								complete: () => {}
-							});
-						},
+				uni.navigateTo({
+					url: '../blog/blog?id=' + index,
+					success: res => {},
+					fail: () => {},
+					complete: () => {}
+				});
+			},
 			clickDelete(id, name) {
 				let url = this.$params.host + this.$params.action_category_del + id
 				let data = {
@@ -322,10 +345,13 @@
 			loadData() {
 				this.myBlog = []
 				this.myCount = -1
+				this.myTag = []
 				page = 0
 				this.getMyBlog()
-				// this.getMyGoods()
+				this.getMyGoodBlogs()
+				this.getMyTags()
 				this.getCategories()
+
 			},
 
 			getMyBlog() {
@@ -369,22 +395,22 @@
 			},
 			// 获取标签数据
 			getTags() {
-			    this.tags = []
-			    let url = this.$params.host + this.$params.action_tags
-			    this.$request.get(url, res => {
-			        url = this.$params.host + this.$params.action_tag_count
-			        res.data.forEach(async (t) => {
-			            let r = await this.$request.requestAsync(url + t.id)
-			            if (r.data.success) {
-			                let tag = {
-			                    id: t.id,
-			                    name: t.name,
-			                    count: r.data.data
-			                }
-			                this.tags.push(tag)
-			            }
-			        })
-			    }, () => {})
+				this.tags = []
+				let url = this.$params.host + this.$params.action_tags
+				this.$request.get(url, res => {
+					url = this.$params.host + this.$params.action_tag_count
+					res.data.forEach(async (t) => {
+						let r = await this.$request.requestAsync(url + t.id)
+						if (r.data.success) {
+							let tag = {
+								id: t.id,
+								name: t.name,
+								count: r.data.data
+							}
+							this.tags.push(tag)
+						}
+					})
+				}, () => {})
 			},
 			getMyGoodBlogs() {
 				if (this.myGoodBlogs >= 0 && this.myGoodBlogs.length == this.myGoodCount) return
@@ -396,7 +422,7 @@
 					this.$request.get(this.$params.host + this.$params.action_hot + good, (res) => {
 						if (!res.data.picture.startsWith('http')) res.data.picture = this.$params.host +
 							res.data.picture
-						console.log(res);
+
 						let item = {
 							"title": res.data.title,
 							"id": res.data.id,
@@ -405,10 +431,29 @@
 						this.myGoodBlogs = this.myGoodBlogs.concat(item);
 						this.myGoodCount = goods.length;
 						this.status[1].Visible = this.myGoodCount > 0;
-						console.log(this.myGoodBlogs);
+
 					}, () => {})
 
 				})
+			},
+			getMyTags() {
+
+				this.$request.get(this.$params.host + this.$params.action_tags, res => {
+					let url = this.$params.host + this.$params.action_tag_count
+					res.data.forEach(async (r) => {
+						// let categories = []
+						let c = await this.$request.requestAsync(url + r.id)
+						if (c.data.success) {
+							let tag = {
+								id: r.id,
+								title: r.name,
+								count: c.data.data
+							}
+							this.myTag.push(tag);
+						}
+					})
+
+				}, () => {})
 			},
 			clickSwitch(index) {
 				let now = this.status[index].visible
